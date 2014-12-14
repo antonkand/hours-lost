@@ -30,7 +30,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', process.env.PORT || 8080);
 
-mongoose.connect(dbConnection);
+//mongoose.connect(dbConnection);
 
 var start = function () {
     app.listen(app.get('port'), function () {
