@@ -1,3 +1,4 @@
-@import "imports/normalize"; // for use with skeleton import
-@import "imports/skeleton"; // skeleton turned into scss import
-@import "imports/hover"; // hover.css turned into scss import
+@import "imports/vendor/normalize"; // for use with skeleton import
+@import "imports/vendor/skeleton"; // skeleton turned into scss import
+@import "imports/vendor/hover"; // hover.css turned into scss import
+@import "imports/custom/containerdimensions"; // custom container dimensions

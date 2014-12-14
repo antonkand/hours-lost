@@ -1,0 +1,36 @@
+/*
+  helper classes for adjusting elements to the viewport
+*/
+
+.full-viewport-height {
+  height: 100vh;
+}
+
+.half-viewport-height {
+  height: 50vh;
+}
+
+.quarter-viewport-height {
+  height: 25vh;
+}
+
+.full-viewport-width {
+  width: 100vw;
+}
+
+.half-viewport-width {
+  width: 50vw;
+}
+
+.quarter-viewport-width {
+  width: 25vw;
+}
+
+.vertical-center {
+  height: 50vh;
+  margin: 25vh;
+}
+
+.quarter-margin-top {
+  margin: 25vh;
+}

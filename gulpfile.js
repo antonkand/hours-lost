@@ -1,6 +1,8 @@
 'use strict';
 
 var gulp = require('gulp');
+var livereload = require('gulp-livereload');
+
 // css
 var compass = require('gulp-compass');
 var minifyCSS = require('gulp-minify-css');
@@ -76,12 +78,15 @@ gulp.task('templates', function () {
 });
 
 gulp.task('watch', function () {
+    livereload.listen();
     gulp.watch(paths.sass + '/imports/*.scss', ['compass']);
     gulp.watch(paths.sass + '/*.scss', ['compass']);
     gulp.watch(paths.original_img + '/**/*.*', ['img']);
     gulp.watch(paths.angular_src, ['angular']);
     gulp.watch(paths.templates, ['templates']);
     gulp.watch(paths.script_src, ['scripts']);
+    gulp.watch('./public/**').on('change', livereload.changed);
+    gulp.watch('./views/**').on('change', livereload.changed);
 });
 
 gulp.task('default', ['compass', 'img', 'angular', 'templates', 'scripts', 'watch']);
