@@ -1,0 +1,30 @@
+{
+  "name": "hours-lost",
+  "version": "0.0.1",
+  "homepage": "https://github.com/antonkandersson/hours-lost",
+  "authors": [
+    "Anton K. Andersson <jag@antonkandersson.se>"
+  ],
+  "description": "ejs, angular, mongoose, express, socket.io",
+  "main": "app.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "ejs",
+    "angular",
+    "mongoose",
+    "express",
+    "socket.io",
+    "mvc"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

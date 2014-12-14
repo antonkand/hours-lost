@@ -1,0 +1,54 @@
+<h1 class="col-xs-6 text-center" ng-cloak>
+    <i class="fa fa-car"></i> Trafikdata från SR Trafik
+</h1>
+<nav class="col-xs-6" style="height: 15vh;" ng-cloak>
+    <ul class="nav nav-tabs pull-down">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                <i class="fa fa-bolt"></i> Händelser <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                 <li ng-repeat="event in messages.events">
+                        <a href="#dropdown1" data-toggle="tab">{{event.title}}</a>
+                 </li>
+                 <li class="divider"></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                <i class="fa fa-tag"></i> Sortering <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                 <li>
+                        <a href="#dropdown1" data-toggle="tab">Vägtrafik</a>
+                 </li>
+                                 <li class="divider"></li>
+
+                <li>
+                        <a href="#dropdown1" data-toggle="tab">Kollektivtrafik</a>
+                 </li>
+                                 <li class="divider"></li>
+
+                <li>
+                        <a href="#dropdown1" data-toggle="tab">Störningar</a>
+                 </li>
+                                 <li class="divider"></li>
+
+                <li>
+                        <a href="#dropdown1" data-toggle="tab">Övrigt</a>
+                 </li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                <i class="fa fa-building"></i> Områden <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!--<ul class="dropdown-menu" ng-repeat="area in areas">-->
+                <li data-toggle="tab"><a href="#">area</a></li>
+                <!--<li data-toggle="tab"><a href="#">{{area}}</a></li>-->
+                <li class="divider"></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
