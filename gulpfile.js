@@ -37,9 +37,10 @@ gulp.task('compass', function() {
     return gulp.src(paths.sass + '/*.scss')
         .pipe(compass({
             css: paths.css,
-            sass: paths.sass
+            sass: paths.sass,
+            comments: false
         }))
-        .pipe(prefix('last 2 versions', '> 1%', 'ie 9'))
+        .pipe(prefix('last 6 versions', '> 1%', 'ie 9'))
         .pipe(minifyCSS())
         .pipe(gulp.dest(paths.css));
 });
