@@ -1,0 +1,39 @@
+.bg-yellow {
+  background-color: $yellow;
+}
+
+.bg-aqua {
+  background-color: $aqua;
+}
+
+.bg-white {
+  background-color: $white;
+}
+
+.bg-green {
+  background-color: $green;
+}
+
+.bg-red-transparent {
+  background-color: $transparent-red;
+}
+
+.bg-mac {
+  background: url('../img/mac_bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.bg-clock {
+  background: url('../img/clock_bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.silver-font {
+  color: $silver;
+}

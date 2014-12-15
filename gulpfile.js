@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 var livereload = require('gulp-livereload');
-
+var watch = require('gulp-watch');
 // css
 var compass = require('gulp-compass');
 var minifyCSS = require('gulp-minify-css');
@@ -36,7 +36,8 @@ var paths = {
 
 // Tasks
 gulp.task('compass', function() {
-    return gulp.src(paths.sass + '/*.scss')
+     gulp.src(paths.sass + '/*.scss')
+        //.pipe(watch(paths.sass + '/*.scss'))
         .pipe(compass({
             css: paths.css,
             sass: paths.sass,
@@ -45,11 +46,12 @@ gulp.task('compass', function() {
         .pipe(prefix('last 6 versions', '> 1%', 'ie 9'))
         .pipe(minifyCSS())
         .pipe(gulp.dest(paths.css));
+      //.pipe(livereload());
 });
 
 gulp.task('img', function () {
     return gulp.src(paths.original_img)
-        .pipe(imagemin ({
+      .pipe(imagemin ({
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
             use: [optipng(), jpegtran(), svgo()]
@@ -59,34 +61,37 @@ gulp.task('img', function () {
 
 gulp.task('angular', function () {
     return gulp.src(paths.angular_src)
-        .pipe(annotate())
+      //.pipe(watch(paths.angular_src))
+      .pipe(annotate())
         .pipe(concat('angularbundle.js'))
         //.pipe(uglify())
         .pipe(gulp.dest(paths.script_dist));
+      //.pipe(livereload());
 });
 
 gulp.task('scripts', function () {
     return gulp.src(paths.script_src)
-        .pipe(concat('jsbundle.js'))
+      //.pipe(watch(paths.script_src))
+      .pipe(concat('jsbundle.js'))
         .pipe(uglify())
         .pipe(gulp.dest(paths.script_dist));
+    //.pipe(livereload());
 });
 
 gulp.task('templates', function () {
     return gulp.src(paths.templates)
-        .pipe(gulp.dest(paths.templates_dist));
+      //.pipe(watch(paths.templates))
+      .pipe(gulp.dest(paths.templates_dist));
+    //.pipe(livereload());
 });
 
 gulp.task('watch', function () {
-    livereload.listen();
-    gulp.watch(paths.sass + '/imports/*.scss', ['compass']);
+    gulp.watch(paths.sass + '/imports/**/*.scss', ['compass']);
     gulp.watch(paths.sass + '/*.scss', ['compass']);
     gulp.watch(paths.original_img + '/**/*.*', ['img']);
     gulp.watch(paths.angular_src, ['angular']);
     gulp.watch(paths.templates, ['templates']);
     gulp.watch(paths.script_src, ['scripts']);
-    gulp.watch('./public/**').on('change', livereload.changed);
-    gulp.watch('./views/**').on('change', livereload.changed);
 });
 
 gulp.task('default', ['compass', 'img', 'angular', 'templates', 'scripts', 'watch']);

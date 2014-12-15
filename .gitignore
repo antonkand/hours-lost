@@ -1,5 +1,6 @@
 # Eames
 frontend/src/bower_components
+frontend/src/img
 
 # JetBrains
 .idea
