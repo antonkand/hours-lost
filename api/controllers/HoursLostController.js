@@ -7,4 +7,7 @@ module.exports = function (app) {
     app.get('/', function (req, res) {
         res.render('index');
     });
+    app.get('/connected', function (req, res) {
+       res.render('connected');
+    });
 };

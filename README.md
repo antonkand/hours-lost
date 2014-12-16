@@ -14,6 +14,7 @@ Stacken är JS-vänlig, från klient till DB.
 * AngularJS
 * Node.js (Express, EJS)
 * MongoDB (Mongoose)
+* SCSS + mikroramverk (Hover.css, Skeleton2, Normalize)
 * Digital Ocean
 
 ## Första utkast på konceptskiss
