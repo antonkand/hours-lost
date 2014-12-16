@@ -14,12 +14,16 @@
   background-color: $green;
 }
 
+.bg-silver {
+  background-color: $silver;
+}
+
 .bg-red-transparent {
   background-color: $transparent-red;
 }
 
 .bg-mac {
-  background: url('../img/mac_bg.jpg') no-repeat center center fixed;
+  background: url('../img/mac_bg_960.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -27,13 +31,17 @@
 }
 
 .bg-clock {
-  background: url('../img/clock_bg.jpg') no-repeat center center fixed;
+  background: url('../img/clock_bg_960.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
 
-.silver-font {
-  color: $silver;
+.button-20-rem-w {
+  width: 20rem;
+}
+
+.white-font {
+  color: $white;
 }
