@@ -33,12 +33,24 @@
   vertical-align:top;
 }
 
-.push-10-percent-top {
+.bump-10-percent-top {
   margin-top: 10%;
+}
+
+.bump-1-rem-top {
+  margin-top: 1rem;
+}
+
+.bump-5-px-top {
+  margin-top: 0.5rem;
 }
 
 .no-margin-bottom {
   margin-bottom: 0;
+}
+
+.no-margin-top {
+  margin-top: 0;
 }
 
 .no-padding {

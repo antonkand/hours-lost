@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'fontello';
-  src: url('../font/fontello.eot?22487208');
-  src: url('../font/fontello.eot?22487208#iefix') format('embedded-opentype'),
-  url('../font/fontello.woff?22487208') format('woff'),
-  url('../font/fontello.ttf?22487208') format('truetype'),
-  url('../font/fontello.svg?22487208#fontello') format('svg');
+  src: url('../font/fontello.eot?79598117');
+  src: url('../font/fontello.eot?79598117#iefix') format('embedded-opentype'),
+  url('../font/fontello.woff?79598117') format('woff'),
+  url('../font/fontello.ttf?79598117') format('truetype'),
+  url('../font/fontello.svg?79598117#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'fontello';
-    src: url('../font/fontello.svg?22487208#fontello') format('svg');
+    src: url('../font/fontello.svg?79598117#fontello') format('svg');
   }
 }
 */
@@ -56,4 +56,5 @@
 .icon-twitter:before { content: '\e803'; } /* 'î ƒ' */
 .icon-instagram:before { content: '\e804'; } /* 'î „' */
 .icon-happy:before { content: '\e805'; } /* 'î …' */
+.icon-rocket:before { content: '\e806'; } /* 'î †' */
 .icon-info:before { content: '\e807'; } /* 'î ‡' */

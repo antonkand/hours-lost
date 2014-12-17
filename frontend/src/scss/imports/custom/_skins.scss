@@ -57,9 +57,16 @@
 .dark-font {
   color: $black;
 }
+.navy-font {
+  color: $navy;
+}
 
 .no-underline {
   text-decoration: none;
+}
+
+.center-text {
+  text-align: center;
 }
 
 .eighty-percent-w {
@@ -78,10 +85,6 @@
   height: 100%;
   overflow: auto;
 }
-//
-//.large-font {
-//  font-size: 3rem;
-//}
 @media (min-width: 400px) {
   .large-font {
     font-size: 2.9rem;
@@ -95,6 +98,8 @@
 @media (min-width: 550px) {
   .large-font {
     font-size: 3.2rem;
-//    padding: 0.8rem;
+  }
+  .medium-font {
+    font-size: 2.3rem;
   }
 }
