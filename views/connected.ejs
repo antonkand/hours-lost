@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>How many hours have you lost to social media?</title>
+    <title>You've lost {{ controller.hours }} of your life to social media.</title>
     <%- include partials/meta.ejs %>
     <%- include partials/css.ejs %>
 </head>
 <body>
+<%- include partials/connected_totaltime.ejs %>
 <%- include partials/scripts.ejs %>
 </body>
 </html>

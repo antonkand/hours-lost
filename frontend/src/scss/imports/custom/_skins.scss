@@ -38,10 +38,63 @@
   background-size: cover;
 }
 
+.bg-city {
+  background: url('../img/city_hires.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .button-20-rem-w {
   width: 20rem;
 }
 
 .white-font {
   color: $white;
+}
+
+.dark-font {
+  color: $black;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.eighty-percent-w {
+  width: 80%;
+}
+
+.hundred-percent-w {
+  width: 100%;
+}
+
+.fifty-percent-w {
+  width: 50%;
+}
+
+.hundred-percent-h {
+  height: 100%;
+  overflow: auto;
+}
+//
+//.large-font {
+//  font-size: 3rem;
+//}
+@media (min-width: 400px) {
+  .large-font {
+    font-size: 2.9rem;
+  }
+  .button {
+    margin: 1.9rem;
+  }
+}
+
+
+@media (min-width: 550px) {
+  .large-font {
+    font-size: 3.2rem;
+//    padding: 0.8rem;
+  }
 }

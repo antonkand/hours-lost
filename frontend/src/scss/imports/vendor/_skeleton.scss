@@ -159,8 +159,8 @@ input[type="button"] {
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  border: 1px solid #bbb;
-  height: 38px;
+  border: 0; // originally border: 1px solid #bbb;
+  height: 45px; // originally 38px
   line-height: 38px;
   padding: 0 30px;
   letter-spacing: .1rem;
@@ -348,10 +348,10 @@ p {
 /* Misc
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 hr {
-  margin-top: 3rem;
-  margin-bottom: 3.5rem;
+  margin-top: 1.6rem; // originally 3rem
+  margin-bottom: 1.8rem; // originally 3.5rem
   border-width: 0;
-  border-top: 1px solid #E1E1E1;
+  border-top: 0.2rem solid $teal;
 }
 
 /* Clearing
@@ -377,7 +377,9 @@ there.
 
 
 /* Larger than mobile */
-@media (min-width: 400px) {}
+@media (min-width: 400px) {
+  .large-font {}
+}
 
 /* Larger than phablet (also point when grid becomes active) */
 @media (min-width: 550px) {}

@@ -1,3 +1,54 @@
 .no-margin {
   margin: 0;
 }
+
+.inline-block {
+  display: inline-block;
+}
+
+.block {
+  display: block;
+}
+
+.vertical-center {
+  margin: 15vh 0;
+//  height: 70vh;
+}
+
+.horizontal-center {
+  margin: 0 auto;
+}
+
+.offset-by-four-left {
+ margin-left: 34.6666666667%;
+}
+
+.acts-as-table {
+    display: table;
+    height: auto;
+}
+
+.acts-as-cell {
+  display: table-cell;
+  vertical-align:top;
+}
+
+.push-10-percent-top {
+  margin-top: 10%;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.top-margin-medium {
+  margin-top: 1.6rem;
+}
+
+.bottom-margin-medium {
+  margin-bottom: 1.6rem;
+}
