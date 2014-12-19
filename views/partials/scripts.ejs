@@ -1,2 +1,12 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('/hours-lost');
+  socket.on('socket:connection', function (data) {
+      console.log(data);
+      var msg = ('hours-lost: client socket ' + socket.ids + ' successfully connected to server.');
+      socket.emit('socket:connection', msg);
+      console.log(socket);
+  });
+</script>
 <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js" async></script>-->
 <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-animate.min.js" async></script>-->
