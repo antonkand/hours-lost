@@ -1,19 +1,21 @@
 'use strict';
+// lib deps
+var config = require('./config/hourslost_config.js');
+var middleware = require('./lib/middleware/middleware.js');
+var HoursLostController = require('./api/controllers/HoursLostController.js');
+var httpsOptions = config.https;
+var dbConnection = config.dbConnection;
+
 // npm deps
 var express = require('express');
 var app = express();
-var server = require('https').Server(app);
+var server = require('https').Server(httpsOptions, app);
 var io = require('socket.io')(server).of('/hours-lost');
 var path = require('path');
 var morgan = require('morgan');
 var logger = require('express-logger');
 var chalk = require('chalk');
 var mongoose = require('mongoose');
-
-// lib deps
-var middleware = require('./lib/middleware/middleware.js');
-var HoursLostController = require('./api/controllers/HoursLostController.js');
-var dbConnection = require('./config/hourslost_config.js').dbConnection;
 
 // morgan used for logging when developing
 // logging once per 24 h in prod
