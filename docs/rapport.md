@@ -38,6 +38,7 @@ TODO: implement massa text här
 För att hålla nere sidans vikt, har CSS-ramverk som Bootstrap skippats. Istället har mikro-ramverk valts för presentationen. Som ramverk för JavaScript används ramverket [AngularJS](https://angularjs.org), men även mikro-ramverket [SweetAlert](http://tristanedwards.me/sweetalert).
 
 **CSS:**
+
 1. [Skeleton](http://getskeleton.com/)
 För en responsiv grid, som är mobile-first
 
@@ -48,6 +49,7 @@ Urvalda animationer för bättre UX
 Urvalda ikoner från bland annat [Font Awesome](http://fortawesome.github.io/Font-Awesome/), för att endast implementera de som behövs
 
 **JavaScript:**
+
 1. [AngularJS](https://angularjs.org)
 Stabilt ramverk, som skapar en applikation som är lätt att överblicka
 
