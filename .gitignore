@@ -1,7 +1,7 @@
 # app
 frontend/src/bower_components
 frontend/src/img
-config
+/config
 
 # JetBrains
 .idea
