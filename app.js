@@ -1,4 +1,5 @@
 'use strict';
+
 // lib deps
 var config = require('./config/hourslost_config.js');
 var middleware = require('./lib/middleware/middleware.js');
@@ -49,6 +50,7 @@ var start = function () {
         ));
     });
 };
+
 // handles routing and control of routes
 HoursLostController(app, io);
 

@@ -1,4 +1,4 @@
-var SocialMediaData = require('../models/SocialMediaData.js');
+var SocialMediaData = require('../models/User.js');
 var debug = require('debug');
 
 var logOnSave = function (socialMediaData) {
@@ -9,7 +9,7 @@ module.exports = function (app, io) {
   'use strict';
   debug('OAuth2Controller: initialized.');
   var save = function (callback) {
-    var socialMediaData = new SocialMediaData({
+    var socialMediaData = new User({
       id: 1,
       tweets: 200,
       facebookPosts: 200,
