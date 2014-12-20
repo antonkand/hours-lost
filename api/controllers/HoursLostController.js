@@ -14,7 +14,7 @@ module.exports = function (app, io) {
     io.on('connection', function (socket) {
       socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
       socket.on('socket:connection', function (data) {
-        console.log(data);
+        console.log(chalk.green(data));
     });
 });
     OAuth2Controller(app, io);

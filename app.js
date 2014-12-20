@@ -47,7 +47,6 @@ var start = function () {
         ));
     });
 };
-
 // handles routing and control of routes
 HoursLostController(app, io);
 
@@ -55,10 +54,7 @@ HoursLostController(app, io);
 if (require.main === module) {
     start();
 }
-// else it's required(), export start
 else {
-    // logs which worker that's handling requests
-    app.use(middleware.clusterlog);
-    module.exports = start;
+  throw new Error('currently not supported as required module');
 }
 
