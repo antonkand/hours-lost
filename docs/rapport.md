@@ -40,16 +40,20 @@ För att hålla nere sidans vikt, har CSS-ramverk som Bootstrap skippats. Istäl
 **CSS:**
 1. [Skeleton](http://getskeleton.com/)
 För en responsiv grid, som är mobile-first
+
 2. [Hover.css](http://ianlunn.github.io/Hover/)
 Urvalda animationer för bättre UX
+
 3. [Fontello](http://fontello.com/)
 Urvalda ikoner från bland annat [Font Awesome](http://fortawesome.github.io/Font-Awesome/), för att endast implementera de som behövs
 
 **JavaScript:**
 1. [AngularJS](https://angularjs.org)
 Stabilt ramverk, som skapar en applikation som är lätt att överblicka
+
 2. [SweetAlert](http://tristanedwards.me/sweetalert)
 Ger snyggare alertmeddelanden till användaren
+
 3. [Socket.io](https://socket.io)
 Crossbrowser, asynkron realtidskommunikation över WebSockets
 
