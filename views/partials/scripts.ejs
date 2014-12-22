@@ -1,12 +1,13 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var socket = io.connect('/hours-lost');
-  socket.on('socket:connection', function (data) {
+  var main = io.connect('/hours-lost');
+  var twitter = io.connect('/hours-lost/twitter');
+  main.on('socket:connection', function (data) {
       console.log(data);
-      var log = ('hours-lost:\n   client socket ' + socket.ids + '\n   in namespace ' + socket.nsp + ' connected.');
-      socket.emit('socket:connection', log);
+      var log = ('hours-lost:\n   client socket ' + main.ids + '\n   in namespace ' + main.nsp + ' connected.');
+      main.emit('socket:connection', log);
   });
-  socket.on('twitter:username', function (data) {
+  twitter.on('twitter:username', function (data) {
       console.log('twitter username received: ' + data);
   });
 </script>
