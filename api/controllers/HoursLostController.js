@@ -2,7 +2,7 @@
 var chalk = require('chalk');
 var debug = require('debug');
 var OAuth2Controller = require('./OAuth2Controller.js');
-module.exports = function (app, io) {
+module.exports = function (app, io, passport) {
     debug('HoursLostController: initialized.');
     app.get('/', function (req, res) {
         res.render('index');
@@ -17,5 +17,5 @@ module.exports = function (app, io) {
         console.log(chalk.green(data));
     });
 });
-    OAuth2Controller(app, io);
+    OAuth2Controller(app, io, passport);
 };

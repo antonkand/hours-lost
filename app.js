@@ -17,6 +17,11 @@ var morgan = require('morgan');
 var logger = require('express-logger');
 var chalk = require('chalk');
 var mongoose = require('mongoose');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var flash = require('connect-flash');
+var session = require('express-session');
+var passport = require('passport');
 
 // morgan used for logging when developing
 // logging once per 24 h in prod
@@ -50,9 +55,16 @@ var start = function () {
         ));
     });
 };
-
+app.use(session({
+  secret: config.secretString,
+  resave: true,
+  saveUninitialized: true
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session({})); // persistent login sessions
+app.use(flash());
 // handles routing and control of routes
-HoursLostController(app, io);
+HoursLostController(app, io, passport);
 
 // if run directly, start server
 if (require.main === module) {

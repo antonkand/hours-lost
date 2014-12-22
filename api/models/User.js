@@ -1,10 +1,13 @@
 'use strict';
 var mongoose = require('mongoose');
-var SocialMediaData = mongoose.Schema({
+var User = mongoose.Schema({
   id: Number,
-  tweets: Number,
-  facebookPosts: Number,
-  instagrams: Number,
-  gplusPosts: Number
+  twitterId: String,
+  socialmediaData: {
+    tweets: Number,
+    facebookPosts: Number,
+    instagrams: Number,
+    gplusPosts: Number
+  }
 });
-module.exports = mongoose.model('SocialMediaData', SocialMediaData);
+module.exports = mongoose.model('User', User);
