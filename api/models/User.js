@@ -1,6 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
-var User = mongoose.Schema({
+var User = new mongoose.Schema({
   id: Number,
   twitterId: String,
   socialmediaData: {

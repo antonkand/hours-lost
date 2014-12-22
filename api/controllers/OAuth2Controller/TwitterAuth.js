@@ -2,13 +2,30 @@
 var chalk = require('chalk');
 
 var User = require('../../models/User.js');
+//console.log(User);
+//User.save({
+//  id: 123,
+//  twitterId: 'ididid'
+//});
+
 var authCredentials = require('../../../config/auth/index');
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var middleware = require('../../../lib/middleware/middleware.js');
 
 module.exports = function (app, io, passport) {
-  var socket = io.of('/hours-lost/twitter');
-  socket.emit('twitter:username', 'anton'); // TODO: Correct implementation
+  //passport.serializeUser(function(user, done) {
+  //  done(null, user.id);
+  //});
+  //
+  //// used to deserialize the user
+  //passport.deserializeUser(function(id, done) {
+  //  User.findById(id, function(err, user) {
+  //    done(err, user);
+  //  });
+  //});
+  io.of('/hours-lost/twitter').on('connection', function (socket) {
+    socket.emit('twitter:username', 'anton'); // TODO: Correct implementation
+  });
 
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * all routes for oauths
@@ -24,12 +41,21 @@ module.exports = function (app, io, passport) {
       callbackURL: authCredentials.twitter.callback_url
     }, function (token, tokenSecret, profile, done) {
       // TODO: save profile to DB
-      //console.log(token);//User.save({})
-      //console.log(tokenSecret);
-      console.log(profile.username);
-      //io.emit('twitter:username', profile.username); // TODO: Correct implementation
-      console.log('inside strategy');
-      done();
+      // TODO: correct instantion of Mongoose model
+      // TODO: TypeError: Object function model(doc, fields, skipId) {
+      // TODO: if (!(this instanceof model))
+      // TODO:   return new model(doc, fields, skipId);
+      // TODO:  Model.call(this, doc, fields, skipId);
+      // TODO: } has no method 'save'
+      console.log('User outside callback');
+
+      console.log(User);
+      User.save({ twitterId: profile.id }, function (err, user) {
+        console.log('user inside callback');
+
+        console.log(user);
+        return done(err, user);
+      });
     }
   ));
   app.get('/auth/twitter', passport.authenticate('twitter'));
