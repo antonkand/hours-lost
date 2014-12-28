@@ -6,7 +6,7 @@ module.exports = function (app, io, passport) {
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
-      callbackURL: authCredentials.twitter.callback_url
+      callbackURL: authCredentials.twitter.callbackURL
     }, function (token, tokenSecret, profile, done) {
       process.nextTick(function() {
         console.log('inside nexttick');
