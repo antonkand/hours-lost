@@ -7,8 +7,11 @@
       var log = ('hours-lost:\n   client socket ' + main.ids + '\n   in namespace ' + main.nsp + ' connected.');
       main.emit('socket:connection', log);
   });
-  twitter.on('twitter:username', function (data) {
-      console.log('twitter username received: ' + data);
+  twitter.on('twitter:connected', function () {
+      console.log('twitter:connected.');
+  });
+  twitter.on('twitter:user', function (data) {
+      console.log('twitter:user received: ' + data);
   });
 </script>
 <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js" async></script>-->

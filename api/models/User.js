@@ -2,9 +2,13 @@
 var mongoose = require('mongoose');
 var User = new mongoose.Schema({
   id: Number,
-  twitterId: String,
   socialmediaData: {
-    tweets: Number,
+    twitter: {
+      id: String,
+      token: String,
+      username: String,
+      displayName: String
+    },
     facebookPosts: Number,
     instagrams: Number,
     gplusPosts: Number

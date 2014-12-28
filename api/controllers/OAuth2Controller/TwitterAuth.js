@@ -2,31 +2,14 @@
 var chalk = require('chalk');
 
 var User = require('../../models/User.js');
-//console.log(User);
-//User.save({
-//  id: 123,
-//  twitterId: 'ididid'
-//});
-
 var authCredentials = require('../../../config/auth/index');
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var middleware = require('../../../lib/middleware/middleware.js');
 
 module.exports = function (app, io, passport) {
-  //passport.serializeUser(function(user, done) {
-  //  done(null, user.id);
-  //});
-  //
-  //// used to deserialize the user
-  //passport.deserializeUser(function(id, done) {
-  //  User.findById(id, function(err, user) {
-  //    done(err, user);
-  //  });
-  //});
   io.of('/hours-lost/twitter').on('connection', function (socket) {
-    socket.emit('twitter:username', 'anton'); // TODO: Correct implementation
+    socket.emit('twitter:user', 'username');
   });
-
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * all routes for oauths
    * first, redirect route for specific social media
@@ -35,26 +18,49 @@ module.exports = function (app, io, passport) {
    * authCredentials.<socialmedia>.redirect_uri follows this pattern
    * '/<socialmedia>/callback
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-  passport.use(new TwitterStrategy({
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  // used to deserialize the user
+  passport.deserializeUser(function(user, done) {
+      done(null, user);
+  });
+   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
       callbackURL: authCredentials.twitter.callback_url
     }, function (token, tokenSecret, profile, done) {
-      // TODO: save profile to DB
-      // TODO: correct instantion of Mongoose model
-      // TODO: TypeError: Object function model(doc, fields, skipId) {
-      // TODO: if (!(this instanceof model))
-      // TODO:   return new model(doc, fields, skipId);
-      // TODO:  Model.call(this, doc, fields, skipId);
-      // TODO: } has no method 'save'
-      console.log('User outside callback');
+      process.nextTick(function() {
+        console.log('inside nexttick');
+        User.findOne({ 'socialmediaData.twitter.id': profile.id }, function(err, user) {
+          console.log(user.socialmediaData.twitter.id);
+          // if there is an error, stop everything and return that
+          // ie an error connecting to the database
+          if (err) {
+            return done(err);
+          }
+          // if the user is found then log them in
+          if (user) {
+            return done(null, user); // user found, return that user
+          } else {
+            // if there is no user, create them
+            var newUser = new User();
+            console.log(newUser);
+            // set all of the user data that we need
+            newUser.socialmediaData.twitter.id = profile.id;
+            newUser.socialmediaData.twitter.token = token;
+            newUser.socialmediaData.twitter.username = profile.username;
+            newUser.socialmediaData.twitter.displayName = profile.displayName;
+            // save our user into the database
+            newUser.save(function(err) {
+              if (err) {
+                throw err;
+              }
+              return done(null, newUser);
+            });
+          }
+        });
 
-      console.log(User);
-      User.save({ twitterId: profile.id }, function (err, user) {
-        console.log('user inside callback');
-
-        console.log(user);
-        return done(err, user);
       });
     }
   ));
