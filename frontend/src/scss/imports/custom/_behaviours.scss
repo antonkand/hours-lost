@@ -53,6 +53,10 @@
   margin-top: 0;
 }
 
+.no-padding {
+  padding: 0;
+}
+
 .small-padding {
   padding: 1.5rem;
 }
@@ -80,4 +84,8 @@
 
 .bottom-margin-medium {
   margin-bottom: 1.6rem;
+}
+
+.is-90-percent-w {
+  width: 90%;
 }

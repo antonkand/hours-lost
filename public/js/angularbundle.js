@@ -9,8 +9,11 @@
     .controller('HoursLostController', HoursLostController);
     function HoursLostController () {
       console.log('HoursLostController: initialized');
-      this.minutes = {
-        total: 0,
+      this.calculatedData = {
+        total: {
+          minutes: 0,
+          hours: 0
+        },
         estimates: {
           tweet: 1,
           facebookPost: 5,
@@ -71,22 +74,22 @@
     .directive('customizationSliders', function () {
       return {
         scope: {
-          tweetEstimate: '=',
-          facebookEstimate: '=',
-          gplusEstimate: '=',
-          instagramEstimate: '=',
-          totalEstimate: '='
+          data: '=ngModel'
         },
         restrict: 'E',
         replace: false,
         templateUrl: 'js/angulartemplates/components/CustomizationSliderComponent/customizationslider_template.html',
         link: function (scope, elem, attrs) {
-          console.log('customizationSliders: initialized');
+          console.log('scope.data');
+          console.log(scope.data);
+          console.log(elem);
+          console.log(attrs);
         }
       };
     })
     .controller('CustomizationSliderController', CustomizationSliderController);
-  function CustomizationSliderController () {
+  function CustomizationSliderController ($scope) {
     console.log('CustomizationSliderController: initialized');
   }
+  CustomizationSliderController.$inject = ["$scope"];
 })();

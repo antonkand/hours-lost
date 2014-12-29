@@ -1,33 +1,39 @@
-<h5 class="inline-block">Drag the slider to tweak the numbers</h5>
-    <p><i class="icon-info navy-font"></i>You can also change the estimates by typing.</p>
-    <div class="row no-margin-bottom">
-        <div class="twelve columns">
-            <i class="icon-twitter one column medium-font center-text"></i>
-            <input type="range" min="0" max="100" value="{{tweetEstimate}}" step="1" class="nine columns bump-1-rem-top">
-            <input type="number" class="two columns center-text bump-5-px-top" value="{{tweetEstimate}}">
-        </div>
-    </div>
-    <div class="row no-margin-bottom">
-        <div class="twelve columns">
-            <i class="icon-facebook one column medium-font center-text"></i>
-            <input type="range" min="0" max="100" value="{{facebookEstimate}}" step="1" class="nine columns bump-1-rem-top">
-            <input type="number" class="two columns center-text bump-5-px-top" value="{{facebookEstimate}}">
-        </div>
-    </div>
-    <div class="row no-margin-bottom">
-        <div class="twelve columns">
-            <i class="icon-instagram one column medium-font center-text"></i>
-            <input type="range" min="0" max="100" value="{{instagramEstimate}}" step="1" class="nine columns bump-1-rem-top">
-            <input type="number" class="two columns center-text bump-5-px-top" value="{{instagramEstimate}}">
-        </div>
-    </div>
-    <div class="row no-margin-bottom">
-        <div class="twelve columns">
-            <i class="icon-gplus one column medium-font center-text"></i>
-            <input type="range" min="0" max="100" value="{{gplusEstimate}}" step="1" class="nine columns bump-1-rem-top">
-            <input type="number" class="two columns center-text bump-5-px-top" value="{{gplusEstimate}}">
-        </div>
-    </div>
-    <div class="row">
-        <h5 class="twelve columns"><strong>New estimate:</strong> about a lot. <strong>Exact minutes:</strong> {{totalEstimate}}.</h5>
-    </div>
+<div class="bg-mac">
+	<div class="bg-white">
+		<h5 class="inline-block"><i class="icon-info navy-font"></i>Drag the slider to tweak the numbers</h5>
+		    <div class="row no-margin-bottom">
+		        <div class="twelve columns">
+		            <i class="icon-twitter two columns medium-font center-text"></i>
+		            <input type="range" min="0" max="100" ng-model="data.estimates.tweet" step="1" class="ten columns is-90-percent-w u-pull-right">
+			          <p class="twelve columns center-text">{{data.estimates.tweet}}</p>
+		        </div>
+		    </div>
+		    <div class="row no-margin-bottom">
+		        <div class="twelve columns">
+		            <i class="icon-facebook two columns medium-font center-text"></i>
+		            <input type="range" min="0" max="100" ng-model="data.estimates.facebookPost" step="1" class="ten columns is-90-percent-w u-pull-right">
+								<p class="twelve columns center-text">{{data.estimates.facebookPost}}</p>
+
+		        </div>
+		    </div>
+		    <div class="row no-margin-bottom">
+		        <div class="twelve columns">
+		            <i class="icon-instagram two columns medium-font center-text"></i>
+		            <input type="range" min="0" max="100" ng-model="data.estimates.instagram" step="1" class="ten columns is-90-percent-w u-pull-right">
+			          <p class="twelve columns center-text">{{data.estimates.instagram}}</p>
+
+		        </div>
+		    </div>
+		    <div class="row no-margin-bottom">
+		        <div class="twelve columns">
+		            <i class="icon-gplus two columns medium-font center-text"></i>
+		            <input type="range" min="0" max="100" ng-model="data.estimates.gplusPost" step="1" class="ten columns is-90-percent-w u-pull-right">
+		            <p class="twelve columns center-text">{{data.estimates.gplusPost}}</p>
+
+		        </div>
+		    </div>
+		    <div class="row">
+		        <h5 class="twelve columns"><strong>New estimate:</strong> about {{data.total.hours}}. <strong>Exact minutes:</strong> {{data.total.minutes}}.</h5>
+		    </div>
+		</div>
+</div>

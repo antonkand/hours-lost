@@ -9,8 +9,11 @@
     .controller('HoursLostController', HoursLostController);
     function HoursLostController () {
       console.log('HoursLostController: initialized');
-      this.minutes = {
-        total: 0,
+      this.calculatedData = {
+        total: {
+          minutes: 0,
+          hours: 0
+        },
         estimates: {
           tweet: 1,
           facebookPost: 5,
