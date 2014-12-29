@@ -1,7 +1,10 @@
 (function () {
   'use strict';
   angular
-    .module('HoursLostApp', ['OAuth2Module'])
+    .module('HoursLostApp', [
+      'OAuth2Module',
+      'CalculatedResultModule'
+    ])
     .controller('HoursLostController', HoursLostController);
     function HoursLostController () {
       console.log('HoursLostController: initialized');
@@ -29,4 +32,26 @@
     function OAuth2Controller () {
       console.log('OAuth2Controller: initialized');
     }
+})();
+(function () {
+  'use strict';
+  angular
+    .module('CalculatedResultModule', [])
+    .directive('calculatedResult', function () {
+      return {
+        scope: {
+          minutes: '='
+        },
+        restrict: 'E',
+        replace: false,
+        templateUrl: 'js/angulartemplates/components/CalculatedResultComponent/calculatedresult_template.html',
+        link: function (scope, elem, attrs) {
+          console.log('calculatedResult: initialized');
+        }
+      };
+    })
+    .controller('CalculatedResultController', CalculatedResultController);
+  function CalculatedResultController () {
+    console.log('CalculatedResult: initialized');
+  }
 })();

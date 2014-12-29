@@ -8,9 +8,9 @@
 <body ng-controller="HoursLostController as hourslost" ng-cloak>
     <%- include partials/landingpage_leadcopy.ejs %>
     <oauth-buttons></oauth-buttons>
-    <calculated-result minutes="{{hourslost.minutes}}"></calculated-result>
+    <calculated-result minutes="'hourslost.minutes'"></calculated-result>
     <customization-sliders tweets="10" facebook-posts="10" gplus-posts="10" instagrams="10"></customization-sliders>
-    <final-result minutes="{{hourslost.minutes}}"></final-result>
+    <final-result minutes="'hourslost.minutes'"></final-result>
     <share-field>{{hourslost.shareMessage}}</share-field>
     <%- include partials/scripts.ejs %>
 </body>

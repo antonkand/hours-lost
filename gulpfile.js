@@ -29,7 +29,8 @@ var paths = {
     // globbing isn't used, you need to be specific
     angular_src: [
       hours_lost_folder + 'app/HoursLostApp.js',
-      hours_lost_folder + 'components/OAuth2Component/OAuth2Module.js'
+      hours_lost_folder + 'components/OAuth2Component/OAuth2Module.js',
+      hours_lost_folder + 'components/CalculatedResultComponent/CalculatedResultModule.js'
     ],
     templates: hours_lost_folder + '**/*.html',
     templates_dist: './public/js/angulartemplates',
