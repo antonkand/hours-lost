@@ -6,6 +6,9 @@ var User = require('../models/User.js');
 
 module.exports = function (app, io, passport) {
     debug('HoursLostController: initialized.');
+    app.get('/spa', function (req, res) {
+      res.render('spa');
+    });
     app.get('/', function (req, res) {
         res.render('index');
     });

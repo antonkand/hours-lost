@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="HoursLostApp">
+<head>
+    <title>How many hours of your life have you lost to social media? | Hours Lost App</title>
+    <%- include partials/meta.ejs %>
+    <%- include partials/css.ejs %>
+</head>
+<body ng-controller="HoursLostController as hourslost" ng-cloak>
+    <%- include partials/landingpage_leadcopy.ejs %>
+    <oauth-buttons></oauth-buttons>
+    <calculated-result minutes="{{hourslost.minutes}}"></calculated-result>
+    <customization-sliders tweets="10" facebook-posts="10" gplus-posts="10" instagrams="10"></customization-sliders>
+    <final-result minutes="{{hourslost.minutes}}"></final-result>
+    <share-field>{{hourslost.shareMessage}}</share-field>
+    <%- include partials/scripts.ejs %>
+</body>
+<footer>
+    App by Anton K. Andersson.
+</footer>

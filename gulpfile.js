@@ -27,7 +27,10 @@ var paths = {
     minified_img: './public/img',
     // add your angular scripts in the order you want them,
     // globbing isn't used, you need to be specific
-    angular_src: [],
+    angular_src: [
+      hours_lost_folder + 'app/HoursLostApp.js',
+      hours_lost_folder + 'components/OAuth2Component/OAuth2Module.js'
+    ],
     templates: hours_lost_folder + '**/*.html',
     templates_dist: './public/js/angulartemplates',
     script_dist: './public/js',
