@@ -3,12 +3,21 @@
   angular
     .module('HoursLostApp', [
       'OAuth2Module',
-      'CalculatedResultModule'
+      'CalculatedResultModule',
+      'CustomizationSliderModule'
     ])
     .controller('HoursLostController', HoursLostController);
     function HoursLostController () {
       console.log('HoursLostController: initialized');
-      this.minutes = 100;
+      this.minutes = {
+        total: 0,
+        estimates: {
+          tweet: 1,
+          facebookPost: 5,
+          gplusPost: 5,
+          instagram: 7
+        }
+      };
       this.shareMessage = "Share it yo";
     }
 })();
@@ -53,5 +62,31 @@
     .controller('CalculatedResultController', CalculatedResultController);
   function CalculatedResultController () {
     console.log('CalculatedResult: initialized');
+  }
+})();
+(function () {
+  'use strict';
+  angular
+    .module('CustomizationSliderModule', [])
+    .directive('customizationSliders', function () {
+      return {
+        scope: {
+          tweetEstimate: '=',
+          facebookEstimate: '=',
+          gplusEstimate: '=',
+          instagramEstimate: '=',
+          totalEstimate: '='
+        },
+        restrict: 'E',
+        replace: false,
+        templateUrl: 'js/angulartemplates/components/CustomizationSliderComponent/customizationslider_template.html',
+        link: function (scope, elem, attrs) {
+          console.log('customizationSliders: initialized');
+        }
+      };
+    })
+    .controller('CustomizationSliderController', CustomizationSliderController);
+  function CustomizationSliderController () {
+    console.log('CustomizationSliderController: initialized');
   }
 })();

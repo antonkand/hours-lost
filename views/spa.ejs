@@ -9,7 +9,12 @@
     <%- include partials/landingpage_leadcopy.ejs %>
     <oauth-buttons></oauth-buttons>
     <calculated-result minutes="'hourslost.minutes'"></calculated-result>
-    <customization-sliders tweets="10" facebook-posts="10" gplus-posts="10" instagrams="10"></customization-sliders>
+    <customization-sliders tweet-estimate="hourslost.minutes.estimates.tweet"
+                           facebook-estimate="hourslost.minutes.estimates.facebookPost"
+                           gplus-estimate="hourslost.minutes.estimates.gplusPost"
+                           instagram-estimate="hourslost.minutes.estimates.instagram"
+                           total-estimate="hourslost.minutes.total"
+            ></customization-sliders>
     <final-result minutes="'hourslost.minutes'"></final-result>
     <share-field>{{hourslost.shareMessage}}</share-field>
     <%- include partials/scripts.ejs %>
