@@ -5,7 +5,7 @@
     .directive('customizationSliders', function () {
       return {
         scope: {
-          data: '=ngModel'
+          estimates: '='
         },
         restrict: 'E',
         replace: false,

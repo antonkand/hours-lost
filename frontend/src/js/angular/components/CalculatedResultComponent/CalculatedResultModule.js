@@ -5,7 +5,7 @@
     .directive('calculatedResult', function () {
       return {
         scope: {
-          minutes: '='
+          totals: '='
         },
         restrict: 'E',
         replace: false,

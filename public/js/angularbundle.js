@@ -52,7 +52,7 @@
     .directive('calculatedResult', function () {
       return {
         scope: {
-          minutes: '='
+          totals: '='
         },
         restrict: 'E',
         replace: false,
@@ -74,7 +74,7 @@
     .directive('customizationSliders', function () {
       return {
         scope: {
-          data: '=ngModel'
+          estimates: '='
         },
         restrict: 'E',
         replace: false,
