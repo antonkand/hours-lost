@@ -5,7 +5,8 @@
     .module('HoursLostApp', [
       'OAuth2Module',
       'CalculatedResultModule',
-      'CustomizationSliderModule'
+      'CustomizationSliderModule',
+      'SharingModule'
     ])
     .factory('SweetAlert', SweetAlert)
     .controller('HoursLostController', HoursLostController);
@@ -48,7 +49,7 @@
         }
       };
       this.data.total.minutes = calculateMinutes(this.data.socialMediaPosts, this.data.estimates);
-      this.shareMessage = 'Share it yo';
+      this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
     }
     function SweetAlert () {
       var alerts = {

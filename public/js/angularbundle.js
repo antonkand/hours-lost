@@ -5,7 +5,8 @@
     .module('HoursLostApp', [
       'OAuth2Module',
       'CalculatedResultModule',
-      'CustomizationSliderModule'
+      'CustomizationSliderModule',
+      'SharingModule'
     ])
     .factory('SweetAlert', SweetAlert)
     .controller('HoursLostController', HoursLostController);
@@ -48,7 +49,7 @@
         }
       };
       this.data.total.minutes = calculateMinutes(this.data.socialMediaPosts, this.data.estimates);
-      this.shareMessage = 'Share it yo';
+      this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
     }
     function SweetAlert () {
       var alerts = {
@@ -80,7 +81,7 @@
 })();
 
 
-(function () {
+;(function () {
   'use strict';
   angular
     .module('OAuth2Module', [])
@@ -98,6 +99,28 @@
     function OAuth2Controller () {
       console.log('OAuth2Controller: initialized');
     }
+})();
+;(function () {
+  'use strict';
+  angular
+    .module('SharingModule', [])
+    .directive('shareField', function () {
+      return {
+        scope: {
+          sharemessage: '@'
+        },
+        restrict: 'E',
+        replace: false,
+        templateUrl: 'js/angulartemplates/components/SharingComponent/sharing_template.html',
+        link: function (scope, elem, attrs) {
+          console.log('shareField: initialized');
+        }
+      };
+    })
+    .controller('ShareFieldController', ShareFieldController);
+  function ShareFieldController () {
+    console.log('ShareFieldController: initialized');
+  }
 })();
 (function () {
   'use strict';

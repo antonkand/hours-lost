@@ -30,6 +30,7 @@ var paths = {
     angular_src: [
       hours_lost_folder + 'app/HoursLostApp.js',
       hours_lost_folder + 'components/OAuth2Component/OAuth2Module.js',
+      hours_lost_folder + 'components/SharingComponent/SharingModule.js',
       hours_lost_folder + 'components/CalculatedResultComponent/CalculatedResultModule.js',
       hours_lost_folder + 'components/CustomizationSliderComponent/CustomizationSliderModule.js'
 
