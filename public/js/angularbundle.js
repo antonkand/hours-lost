@@ -7,18 +7,38 @@
       'CalculatedResultModule',
       'CustomizationSliderModule'
     ])
-    .controller('HoursLostController', HoursLostController)
-    .factory('SweetAlert', SweetAlert);
-    /*
-    * functions for controller and factory
-    * all data in app is shared from HoursLostController
-    * SweetAlertFactory gives us flashy alerts
-    * */
+    .factory('SweetAlert', SweetAlert)
+    .controller('HoursLostController', HoursLostController);
+  /*
+  * functions for controller and factory
+  * all data in app is shared from HoursLostController
+  * SweetAlertFactory gives us flashy alerts
+  * */
     function HoursLostController () {
       console.log('HoursLostController: initialized');
-      this.calculatedData = {
+      /*
+       * calculates social media posts, such as tweets and facebook posts into minutes,
+       * by using passed in estimate object
+       * @param Object data: contains the data to calculate.
+       * data obj should look like: { tweet: Number, facebookPost: Number, gplusPost: Number, instagram: Number }
+       * @param Object minutes: minutes to calculate as estimate for each post
+       * minutes obj should look like: { tweet: Number, facebookPost: Number, gplusPost: Number, instagram: Number }
+       * */
+      var calculateMinutes = function (data, minutes) {
+        return (data.tweets ? data.tweets * minutes.tweet : 0) +
+               (data.facebookPosts ? data.facebookPosts * minutes.facebookPost : 0) +
+               (data.gplusPosts ? data.gplusPosts * minutes.gplusPost : 0) +
+               (data.instagrams ? data.instagrams * minutes.instagram : 0);
+      };
+      this.data = {
         total: {
-          minutes: 110
+          minutes: 0
+        },
+        socialMediaPosts: {
+          tweets: 100,
+          facebookPosts: 50,
+          gplusPosts: 50,
+          instagrams: 70
         },
         estimates: {
           tweet: 1,
@@ -27,7 +47,8 @@
           instagram: 7
         }
       };
-      this.shareMessage = "Share it yo";
+      this.data.total.minutes = calculateMinutes(this.data.socialMediaPosts, this.data.estimates);
+      this.shareMessage = 'Share it yo';
     }
     function SweetAlert () {
       var alerts = {
@@ -55,6 +76,7 @@
       };
       return alerts;
     }
+
 })();
 
 
@@ -151,10 +173,6 @@
         replace: false,
         templateUrl: 'js/angulartemplates/components/CustomizationSliderComponent/customizationslider_template.html',
         link: function (scope, elem, attrs) {
-          console.log('scope.data');
-          console.log(scope.data);
-          console.log(elem);
-          console.log(attrs);
         }
       };
     })

@@ -11,10 +11,6 @@
         replace: false,
         templateUrl: 'js/angulartemplates/components/CustomizationSliderComponent/customizationslider_template.html',
         link: function (scope, elem, attrs) {
-          console.log('scope.data');
-          console.log(scope.data);
-          console.log(elem);
-          console.log(attrs);
         }
       };
     })
