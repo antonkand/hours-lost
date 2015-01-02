@@ -18,8 +18,7 @@
       console.log('HoursLostController: initialized');
       this.calculatedData = {
         total: {
-          minutes: 0,
-          hours: 0
+          minutes: 110
         },
         estimates: {
           tweet: 1,
