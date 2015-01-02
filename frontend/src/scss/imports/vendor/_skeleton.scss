@@ -385,13 +385,27 @@ there.
 }
 
 /* Larger than phablet (also point when grid becomes active) */
-@media (min-width: 550px) {}
+@media (min-width: 550px) {
+
+}
 
 /* Larger than tablet */
-@media (min-width: 750px) {}
+@media (min-width: 750px) {
+  .twentyfive-percent-w {
+    width: 25%;
+  }
+}
 
 /* Larger than desktop */
-@media (min-width: 1000px) {}
+@media (min-width: 1000px) {
+  .twentyfive-percent-w {
+    width: 25%;
+  }
+}
 
 /* Larger than Desktop HD */
-@media (min-width: 1200px) {}
+@media (min-width: 1200px) {
+  .twentyfive-percent-w {
+    width: 25%;
+  }
+}

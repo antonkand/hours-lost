@@ -6,10 +6,12 @@ module.exports = function (app, io, passport) {
   passport.use(new InstagramStrategy({
       clientID: authCredentials.instagram.clientId,
       clientSecret: authCredentials.instagram.clientSecret,
-      callbackURL: authCredentials.instagram.callbackURL
-    }, function (token, refreshToken, profile, done) {
+      callbackURL: authCredentials.instagram.callbackURL,
+      passReqToCallback: true
+    }, function (req, token, refreshToken, profile, done) {
       process.nextTick(function() {
-        console.log('inside nexttick');
+        console.log('req.user');
+        console.log(req.session);
         User.findOne({ 'socialmediaData.instagram.id': profile.id }, function(err, user) {
           // if there is an error, stop everything and return that
           // ie an error connecting to the database
