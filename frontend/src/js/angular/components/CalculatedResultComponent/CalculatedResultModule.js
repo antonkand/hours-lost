@@ -17,21 +17,7 @@
     })
     .controller('CalculatedResultController', CalculatedResultController(SweetAlert))
     .factory('SweetAlert', SweetAlert);
-  function CalculatedResultController () {
-    //var clarification = document.querySelector('#clarification');
-    //var infoAlert = SweetAlertFactory.info;
-    //clarification.addEventListener('keydown', function (e) {
-    //  e = e || event;
-    //  e.preventDefault();
-    //  infoAlert('This is my explanation header', 'this is my text', 'you click ok');
-    //}, false);
-    //clarification.addEventListener('click', function (e) {
-    //  e = e || event;
-    //  e.preventDefault();
-    //  infoAlert('This is my explanation header', 'this is my text', 'you click ok');
-    //}, false);
-    //console.log('CalculatedResult: initialized');
-  }
+  function CalculatedResultController () {}
   function SweetAlert () {
     var alerts = {
       error: function (title, text, confirmButtonText) {

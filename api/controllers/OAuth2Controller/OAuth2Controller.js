@@ -18,5 +18,6 @@ module.exports = function (app, io, passport) {
   require('./TwitterAuth.js')(app, io, passport);
   require('./FacebookAuth.js')(app, io, passport);
   require('./GooglePlusAuth.js')(app, io, passport);
+  require('./InstagramAuth.js')(app, io, passport);
   console.log(chalk.cyan('hours-lost ') + chalk.white('OAuth2Controller initialized.'));
 };

@@ -21,6 +21,12 @@ var User = new mongoose.Schema({
       name: String,
       email: String
     },
+    instagram: {
+      id: String,
+      token: String,
+      username: String,
+      full_name: String
+    },
     tweets: Number,
     facebookPosts: Number,
     instagrams: Number,
