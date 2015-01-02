@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'fontello';
-  src: url('../font/fontello.eot?79598117');
-  src: url('../font/fontello.eot?79598117#iefix') format('embedded-opentype'),
-  url('../font/fontello.woff?79598117') format('woff'),
-  url('../font/fontello.ttf?79598117') format('truetype'),
-  url('../font/fontello.svg?79598117#fontello') format('svg');
+  src: url('../font/fontello.eot?16674522');
+  src: url('../font/fontello.eot?16674522#iefix') format('embedded-opentype'),
+  url('../font/fontello.woff?16674522') format('woff'),
+  url('../font/fontello.ttf?16674522') format('truetype'),
+  url('../font/fontello.svg?16674522#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'fontello';
-    src: url('../font/fontello.svg?79598117#fontello') format('svg');
+    src: url('../font/fontello.svg?16674522#fontello') format('svg');
   }
 }
 */
@@ -50,11 +50,12 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-floppy:before { content: '\e800'; } /* 'î €' */
-.icon-facebook:before { content: '\e801'; } /* 'î ' */
-.icon-gplus:before { content: '\e802'; } /* 'î ‚' */
-.icon-twitter:before { content: '\e803'; } /* 'î ƒ' */
-.icon-instagram:before { content: '\e804'; } /* 'î „' */
-.icon-happy:before { content: '\e805'; } /* 'î …' */
-.icon-rocket:before { content: '\e806'; } /* 'î †' */
-.icon-info:before { content: '\e807'; } /* 'î ‡' */
+.icon-floppy:before { content: '\e800'; } /* '' */
+.icon-facebook:before { content: '\e801'; } /* '' */
+.icon-gplus:before { content: '\e802'; } /* '' */
+.icon-twitter:before { content: '\e803'; } /* '' */
+.icon-instagram:before { content: '\e804'; } /* '' */
+.icon-happy:before { content: '\e805'; } /* '' */
+.icon-rocket:before { content: '\e806'; } /* '' */
+.icon-info:before { content: '\e807'; } /* '' */
+.icon-share:before { content: '\e808'; } /* '' */

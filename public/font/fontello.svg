@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg">
-<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<metadata>Copyright (C) 2015 by original authors @ fontello.com</metadata>
 <defs>
 <font id="fontello" horiz-adv-x="1000" >
 <font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
@@ -14,6 +14,7 @@
 <glyph glyph-name="happy" unicode="&#xe805;" d="m261 800c-60 0-109-65-109-144 0-80 49-145 109-145s110 65 110 145c0 79-49 144-110 144z m477 0c-61 0-110-65-110-144 0-80 49-145 110-145 60 0 110 65 110 145 0 79-50 144-110 144z m208-599c-13 0-27-5-37-16-4-4-8-8-12-12-111-109-253-164-396-165-142-2-285 50-396 155l-3 3-12 12c-21 21-54 20-75-1-20-21-20-55 1-76 3-4 8-8 14-14l3-3c132-124 301-186 469-184 169 1 337 67 468 195 5 5 9 10 14 14 20 22 20 56-1 77-10 10-23 15-37 15z" horiz-adv-x="999" />
 <glyph glyph-name="rocket" unicode="&#xe806;" d="m543 236q6-50 8-81t-8-59-13-40-35-32-45-26-70-31-85-37q-32-12-45 4t-3 44l40 110-130 132-106-40q-28-12-43 2t-3 46q12 30 31 79t27 65 22 45 25 36 29 20 41 13l52 0t71-6q10 14 29 39t77 85 118 104 145 75 165 19q8 0 14-6 4-4 6-14 10-82-18-168t-76-151-98-118-86-81z m50 296q22-22 54-22t54 22q22 24 22 56t-22 56q-22 22-54 22t-54-22q-22-24-22-56t22-56z" horiz-adv-x="860" />
 <glyph glyph-name="info" unicode="&#xe807;" d="m74 351l-56 0 0 111 335 0 0-390q0-24 17-40t39-16l55 0 0-113-446 0 0 113 56 0q23 0 40 16t16 40l0 223q0 24-16 40t-40 16z m56 334q0 112 112 112t111-112-111-111-112 111z" horiz-adv-x="482" />
+<glyph glyph-name="share" unicode="&#xe808;" d="m650 200q62 0 106-43t44-107q0-62-44-106t-106-44-106 44-44 106q0 6 1 14t1 12l-260 156q-42-32-92-32-62 0-106 44t-44 106 44 106 106 44q54 0 92-30l260 156q0 4-1 12t-1 12q0 62 44 106t106 44 106-43 44-107q0-62-44-106t-106-44q-52 0-90 32l-262-156q2-8 2-26 0-16-2-24l262-156q36 30 90 30z" horiz-adv-x="800" />
 </font>
 </defs>
 </svg>
