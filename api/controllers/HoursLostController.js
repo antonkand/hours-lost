@@ -2,6 +2,7 @@
 var chalk = require('chalk');
 var debug = require('debug');
 var OAuth2Controller = require('./OAuth2Controller/OAuth2Controller.js');
+var RequestController = require('./APIRequestController/APIRequestController.js');
 var User = require('../models/User.js');
 
 module.exports = function (app, io, passport) {
@@ -22,4 +23,5 @@ module.exports = function (app, io, passport) {
     });
 });
     OAuth2Controller(app, io, passport);
+    RequestController(app);
 };

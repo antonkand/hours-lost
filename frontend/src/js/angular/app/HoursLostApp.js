@@ -49,15 +49,15 @@
         }
       };
       this.activeAccounts = {
-        instagram: true,
-        twitter: false,
+        instagram: false,
+        twitter: true,
         facebook: false,
         gplus: false
       };
       /*
       * gets all social media data authed by the user
       * */
-      this.getSocialMediaData = function ($http) {
+      this.getSocialMediaData = function () {
         Object.keys(that.activeAccounts)
           .filter(function (authedMedia) {
             return that.activeAccounts[authedMedia] === true;
