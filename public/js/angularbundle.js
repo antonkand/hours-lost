@@ -1,4 +1,5 @@
 (function () {
+  /* global swal */
   'use strict';
   angular
     .module('HoursLostApp', [
@@ -6,7 +7,13 @@
       'CalculatedResultModule',
       'CustomizationSliderModule'
     ])
-    .controller('HoursLostController', HoursLostController);
+    .controller('HoursLostController', HoursLostController)
+    .factory('SweetAlert', SweetAlert);
+    /*
+    * functions for controller and factory
+    * all data in app is shared from HoursLostController
+    * SweetAlertFactory gives us flashy alerts
+    * */
     function HoursLostController () {
       console.log('HoursLostController: initialized');
       this.calculatedData = {
@@ -22,6 +29,32 @@
         }
       };
       this.shareMessage = "Share it yo";
+    }
+    function SweetAlert () {
+      var alerts = {
+        error: function (title, text, confirmButtonText) {
+          if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
+            return swal({ title: title,
+              text: text,
+              type: 'error',
+              confirmButtonText: confirmButtonText });
+          }
+          else {
+            return false;
+          }
+        },
+        info: function (title, text, confirmButtonText) {
+          if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
+            return swal({ title: title,
+              text: text,
+              confirmButtonText: confirmButtonText });
+          }
+          else {
+            return false;
+          }
+        }
+      };
+      return alerts;
     }
 })();
 
@@ -62,9 +95,48 @@
         }
       };
     })
-    .controller('CalculatedResultController', CalculatedResultController);
+    .controller('CalculatedResultController', CalculatedResultController(SweetAlert))
+    .factory('SweetAlert', SweetAlert);
   function CalculatedResultController () {
-    console.log('CalculatedResult: initialized');
+    //var clarification = document.querySelector('#clarification');
+    //var infoAlert = SweetAlertFactory.info;
+    //clarification.addEventListener('keydown', function (e) {
+    //  e = e || event;
+    //  e.preventDefault();
+    //  infoAlert('This is my explanation header', 'this is my text', 'you click ok');
+    //}, false);
+    //clarification.addEventListener('click', function (e) {
+    //  e = e || event;
+    //  e.preventDefault();
+    //  infoAlert('This is my explanation header', 'this is my text', 'you click ok');
+    //}, false);
+    //console.log('CalculatedResult: initialized');
+  }
+  function SweetAlert () {
+    var alerts = {
+      error: function (title, text, confirmButtonText) {
+        if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
+          return swal({ title: title,
+            text: text,
+            type: 'error',
+            confirmButtonText: confirmButtonText });
+        }
+        else {
+          return false;
+        }
+      },
+      info: function (title, text, confirmButtonText) {
+        if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
+          return swal({ title: title,
+            text: text,
+            confirmButtonText: confirmButtonText });
+        }
+        else {
+          return false;
+        }
+      }
+    };
+    return alerts;
   }
 })();
 (function () {
