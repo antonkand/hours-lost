@@ -1,7 +1,7 @@
 <div class="bg-city">
         <div class="row">
                 <div class="u-full-width horizontal-center bg-white twelve columns">
-                     <h1 class="inline-block">You've lost around {{totals.minutes / 60}} hours of your life.</h1>
+                     <h1 class="inline-block">You've lost around {{totals.minutes / 60 | number: 2}} hours of your life.</h1>
                      <h3 class="inline-block">Total minutes: {{totals.minutes}}.</h3>
                      <p class="no-margin-top"><a id="clarification" class="dark-font">How is this calculated?</a></p>
                 </div>
