@@ -2,6 +2,25 @@
 var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
 var TwitterStrategy  = require('passport-twitter').Strategy;
+var chalk = require('chalk');
+var createNewTwitterUser = function (profile, token) {
+  var user = new User();
+  user.socialmediaData.twitter.id = profile.id;
+  user.socialmediaData.twitter.token = token;
+  user.socialmediaData.twitter.username = profile.username;
+  user.socialmediaData.twitter.displayName = profile.displayName;
+  return user;
+};
+
+/*
+ * oauth2 login through Instagram
+ * if no authed user is found in session or db, a new user is created
+ * if user is found in db, that account is used
+ * if user is found in session, that session's account is connected to instagram ouath
+ * @param Express Server app: which app to hook the login to
+ * @param Socket.io connection io: the socket.io connection to use
+ * @param Passport passport: the configured passport object to use
+ * */
 module.exports = function (app, io, passport) {
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
@@ -11,8 +30,36 @@ module.exports = function (app, io, passport) {
     }, function (req, token, tokenSecret, profile, done) {
       process.nextTick(function() {
         if (req.user) {
-          console.log(req.user);
-          return done();
+          // match session's stored user with db's user
+          User.findOne({'_id': req.user._id}, function (err, user) {
+            // return if error is thrown when connecting to db, etc
+            if (err) {
+              return done(err);
+            }
+            else {
+              // if user haven't saved previous twitter credentials,
+              // add it to the connected sessions user
+              if (user === null || !user.socialmediaData.facebook.id) {
+                user.socialmediaData.twitter.id = profile.id;
+                user.socialmediaData.twitter.token = token;
+                user.socialmediaData.twitter.username = profile.username;
+                user.socialmediaData.twitter.displayName = profile.displayName;
+                user.save(function (err) {
+                  if (err) {
+                    throw err;
+                  }
+                  else {
+                    return done(null, user);
+                  }
+                });
+              }
+              // user is already in db, use that account
+              else {
+                return done(null, user);
+              }
+              console.log(chalk.green('user found in session, twitter credentials:\n'), user);
+            }
+          });
         }
         else {
           User.findOne({ 'socialmediaData.twitter.id': profile.id }, function(err, user) {
@@ -26,13 +73,8 @@ module.exports = function (app, io, passport) {
             return done(null, user); // user found, return that user
           } else {
             // if there is no user, create them
-            var newUser = new User();
+            var newUser = createNewTwitterUser(profile, token);
             console.log(newUser);
-            // set all of the user data that we need
-            newUser.socialmediaData.twitter.id = profile.id;
-            newUser.socialmediaData.twitter.token = token;
-            newUser.socialmediaData.twitter.username = profile.username;
-            newUser.socialmediaData.twitter.displayName = profile.displayName;
             // save our user into the database
             newUser.save(function(err) {
               if (err) {
