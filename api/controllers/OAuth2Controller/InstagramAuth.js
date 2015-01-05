@@ -32,7 +32,7 @@ module.exports = function (app, io, passport) {
             else {
               // if user haven't saved previous instagram credentials,
               // add it to the connected sessions user
-              if (!user.socialmediaData.instagram.id) {
+              if (user && !user.socialmediaData.instagram.id) {
                 user.socialmediaData.instagram.id = profile.id;
                 user.socialmediaData.instagram.token = token;
                 user.socialmediaData.instagram.username = profile.username;

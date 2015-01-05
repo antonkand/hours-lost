@@ -30,7 +30,7 @@ module.exports = function (app, io, passport) {
             else {
               // if user haven't saved previous facebook credentials,
               // add it to the connected sessions user
-              if (!user.socialmediaData.facebook.id) {
+              if (user && !user.socialmediaData.facebook.id) {
                 user.socialmediaData.facebook.id = profile.id;
                 user.socialmediaData.facebook.token = token;
                 user.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;

@@ -6,10 +6,16 @@ module.exports = function (app, io, passport) {
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
-      callbackURL: authCredentials.twitter.callbackURL
-    }, function (token, tokenSecret, profile, done) {
+      callbackURL: authCredentials.twitter.callbackURL,
+      passReqToCallback: true
+    }, function (req, token, tokenSecret, profile, done) {
       process.nextTick(function() {
-        User.findOne({ 'socialmediaData.twitter.id': profile.id }, function(err, user) {
+        if (req.user) {
+          console.log(req.user);
+          return done();
+        }
+        else {
+          User.findOne({ 'socialmediaData.twitter.id': profile.id }, function(err, user) {
           // if there is an error, stop everything and return that
           // ie an error connecting to the database
           if (err) {
@@ -35,7 +41,7 @@ module.exports = function (app, io, passport) {
               return done(null, newUser);
             });
           }
-        });
+        });}
 
       });
     }
