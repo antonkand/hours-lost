@@ -8,6 +8,11 @@ var User = require('../../models/User.js');
 
 module.exports = function (app, io, passport) {
   'use strict';
+  var twitterSocket = io.of('/hours-lost/twitter');
+  var facebookSocket = io.of('/hours-lost/facebook');
+  var googleSocket = io.of('/hours-lost/google');
+  var instagramSocket = io.of('/hours-lost/instagram');
+
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
@@ -15,7 +20,7 @@ module.exports = function (app, io, passport) {
   passport.deserializeUser(function(user, done) {
     done(null, user);
   });
-  require('./TwitterAuth.js')(app, io, passport);
+  require('./TwitterAuth.js')(app, twitterSocket, passport);
   require('./FacebookAuth.js')(app, io, passport);
   require('./GooglePlusAuth.js')(app, io, passport);
   require('./InstagramAuth.js')(app, io, passport);

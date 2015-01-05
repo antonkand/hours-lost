@@ -20,8 +20,8 @@ module.exports = function (app, io, passport) {
       socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
       socket.on('socket:connection', function (data) {
         console.log(chalk.green(data));
+      });
     });
-});
     OAuth2Controller(app, io, passport);
     RequestController(app);
 };

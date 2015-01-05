@@ -22,6 +22,9 @@ var createNewTwitterUser = function (profile, token) {
  * @param Passport passport: the configured passport object to use
  * */
 module.exports = function (app, io, passport) {
+  console.log('io');
+  io.on('connection', function (socket) {
+    socket.emit('twitter:connected', { hooray: 'hhihi'});
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
@@ -31,6 +34,7 @@ module.exports = function (app, io, passport) {
       process.nextTick(function() {
         if (req.user) {
           // match session's stored user with db's user
+          socket.emit('twitter:user', 'antonio');
           User.findOne({'_id': req.user._id}, function (err, user) {
             // return if error is thrown when connecting to db, etc
             if (err) {
@@ -86,8 +90,10 @@ module.exports = function (app, io, passport) {
         });}
 
       });
-    }
-  ));
+      }
+    ));
+  });
+
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * routes for OAuths
    * @callback follows the pattern '/<socialmedia>/callback'
