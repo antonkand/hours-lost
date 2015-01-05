@@ -14,7 +14,7 @@ module.exports = function (app, io, passport) {
         res.render('index');
     });
     app.get('/connected', function (req, res) {
-       res.render('connected');
+       res.render('spa');
     });
     io.of('/hours-lost').on('connection', function (socket) {
       socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
