@@ -13,7 +13,7 @@ var createNewTwitterUser = function (profile, token) {
 };
 
 /*
- * oauth2 login through Instagram
+ * oauth2 login through Twitter
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
  * if user is found in session, that session's account is connected to instagram ouath
@@ -39,7 +39,7 @@ module.exports = function (app, io, passport) {
             else {
               // if user haven't saved previous twitter credentials,
               // add it to the connected sessions user
-              if (user === null || !user.socialmediaData.facebook.id) {
+              if (user === null || !user.socialmediaData.twitter.id) {
                 user.socialmediaData.twitter.id = profile.id;
                 user.socialmediaData.twitter.token = token;
                 user.socialmediaData.twitter.username = profile.username;
