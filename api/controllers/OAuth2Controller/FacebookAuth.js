@@ -3,6 +3,14 @@ var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
 var chalk = require('chalk');
 var FacebookStrategy  = require('passport-facebook').Strategy;
+var createNewFacebookUser = function (profile, token) {
+  var user = new User();
+  user.socialmediaData.facebook.id = profile.id;
+  user.socialmediaData.facebook.token = token;
+  user.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+  user.socialmediaData.facebook.email = profile.emails[0].value;
+  return user;
+};
 /*
  * oauth2 login through Facebook
  * if no authed user is found in session or db, a new user is created
@@ -30,7 +38,7 @@ module.exports = function (app, io, passport) {
             else {
               // if user haven't saved previous facebook credentials,
               // add it to the connected sessions user
-              if (user && !user.socialmediaData.facebook.id) {
+              if (user === null || !user.socialmediaData.facebook.id) {
                 user.socialmediaData.facebook.id = profile.id;
                 user.socialmediaData.facebook.token = token;
                 user.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
@@ -64,13 +72,8 @@ module.exports = function (app, io, passport) {
               return done(null, user); // user found, return that user
             } else {
               // if there is no user, create them
-              var newUser = new User();
+              var newUser = createNewFacebookUser(profile, token);
               console.log(newUser);
-              // set all of the user data that we need
-              newUser.socialmediaData.facebook.id = profile.id;
-              newUser.socialmediaData.facebook.token = token;
-              newUser.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
-              newUser.socialmediaData.facebook.email = profile.emails[0].value;
               // save our user into the database
               newUser.save(function (err) {
                 if (err) {

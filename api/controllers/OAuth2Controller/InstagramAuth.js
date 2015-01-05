@@ -3,6 +3,14 @@ var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
 var InstagramStrategy  = require('passport-instagram').Strategy;
 var chalk = require('chalk');
+var createNewInstagramUser = function (profile, token) {
+  var user = new User();
+  user.socialmediaData.instagram.id = profile.id;
+  user.socialmediaData.instagram.token = token;
+  user.socialmediaData.instagram.username = profile.username;
+  user.socialmediaData.instagram.full_name = profile.displayName;
+  return user;
+};
 /*
 * oauth2 login through Instagram
 * if no authed user is found in session or db, a new user is created
@@ -32,7 +40,7 @@ module.exports = function (app, io, passport) {
             else {
               // if user haven't saved previous instagram credentials,
               // add it to the connected sessions user
-              if (user && !user.socialmediaData.instagram.id) {
+              if (user === null || !user.socialmediaData.instagram.id) {
                 user.socialmediaData.instagram.id = profile.id;
                 user.socialmediaData.instagram.token = token;
                 user.socialmediaData.instagram.username = profile.username;
@@ -69,16 +77,13 @@ module.exports = function (app, io, passport) {
             }
             // no user found, create new and save to db
             else {
-              var newUser = new User();
-              newUser.socialmediaData.instagram.id = profile.id;
-              newUser.socialmediaData.instagram.token = token;
-              newUser.socialmediaData.instagram.username = profile.username;
-              newUser.socialmediaData.instagram.full_name = profile.displayName;
+              var newUser = createNewInstagramUser(profile, token);
+              console.log(newUser);
               newUser.save(function(err) {
                 if (err) {
                   throw err;
                 }
-                return done(null, newUser);
+                return done(null, user);
               });
             }
           });
