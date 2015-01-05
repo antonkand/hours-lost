@@ -50,7 +50,7 @@ module.exports = function (app, io, passport) {
               else {
                 return done(null, user);
               }
-              console.log(chalk.green('user found in session, instagram credentials:'), user);
+              console.log(chalk.green('user found in session, instagram credentials:\n'), user);
             }
           });
         }

@@ -9,9 +9,7 @@ module.exports = function (app, io, passport) {
       callbackURL: authCredentials.twitter.callbackURL
     }, function (token, tokenSecret, profile, done) {
       process.nextTick(function() {
-        console.log('inside nexttick');
         User.findOne({ 'socialmediaData.twitter.id': profile.id }, function(err, user) {
-          console.log(user.socialmediaData.twitter.id);
           // if there is an error, stop everything and return that
           // ie an error connecting to the database
           if (err) {
