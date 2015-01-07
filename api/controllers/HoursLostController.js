@@ -20,7 +20,8 @@ module.exports = function (app, io) {
     app.use(session({
       secret: config.secretString,
       resave: true,
-      saveUninitialized: true
+      saveUninitialized: true,
+      key: 'hourslost.sid'
     }));
     app.use(passport.initialize());
     app.use(flash());
