@@ -1,7 +1,6 @@
 // npm deps
 var debug = require('debug');
 var chalk = require('chalk');
-var request = require('request');
 
 // own deps
 var User = require('../../models/User.js');

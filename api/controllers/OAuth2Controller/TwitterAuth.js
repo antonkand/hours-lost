@@ -21,10 +21,8 @@ var createNewTwitterUser = function (profile, token) {
  * @param Socket.io connection io: the socket.io connection to use
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (app, io, passport) {
-  console.log('io');
-  io.on('connection', function (socket) {
-    socket.emit('twitter:connected', { hooray: 'hhihi'});
+module.exports = function (app, socket, passport) {
+  socket.emit('twitter:connected', true);
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
@@ -67,32 +65,31 @@ module.exports = function (app, io, passport) {
         }
         else {
           User.findOne({ 'socialmediaData.twitter.id': profile.id }, function(err, user) {
-          // if there is an error, stop everything and return that
-          // ie an error connecting to the database
-          if (err) {
-            return done(err);
-          }
-          // if the user is found then log them in
-          if (user) {
-            return done(null, user); // user found, return that user
-          } else {
-            // if there is no user, create them
-            var newUser = createNewTwitterUser(profile, token);
-            console.log(newUser);
-            // save our user into the database
-            newUser.save(function(err) {
-              if (err) {
-                throw err;
-              }
-              return done(null, newUser);
-            });
-          }
-        });}
-
-      });
+            // if there is an error, stop everything and return that
+            // ie an error connecting to the database
+            if (err) {
+              return done(err);
+            }
+            // if the user is found then log them in
+            if (user) {
+              return done(null, user); // user found, return that user
+            } else {
+              // if there is no user, create them
+              var newUser = createNewTwitterUser(profile, token);
+              console.log(newUser);
+              // save our user into the database
+              newUser.save(function(err) {
+                if (err) {
+                  throw err;
+                }
+                return done(null, newUser);
+              });
+            }
+        });
       }
-    ));
-  });
+     });
+    }
+  ));
 
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * routes for OAuths
@@ -103,6 +100,7 @@ module.exports = function (app, io, passport) {
       failureRedirect: '/'
     }),
     function(req, res) {
+      socket.emit('twitter:user', 'user');
       // Successful authentication, redirect to connected state.
       res.redirect('/connected');
     });
