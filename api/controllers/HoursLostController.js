@@ -10,7 +10,12 @@ var session = require('express-session');
 var OAuth2Controller = require('./OAuth2Controller/OAuth2Controller.js');
 var RequestController = require('./APIRequestController/APIRequestController.js');
 var User = require('../models/User.js');
-
+/*
+ * main controller
+ * all child controllers are found inside of it
+ * configures passport, and handles session
+ * @param Express app: app to configure and use
+ * @param Socket.io io: socket connection to use */
 module.exports = function (app, io) {
     app.use(session({
       secret: config.secretString,
@@ -19,7 +24,6 @@ module.exports = function (app, io) {
     }));
     app.use(passport.initialize());
     app.use(flash());
-    debug('HoursLostController: initialized.');
     app.get('/spa', function (req, res) {
       res.render('spa');
     });
@@ -29,9 +33,9 @@ module.exports = function (app, io) {
     app.get('/connected', function (req, res) {
        res.render('spa');
     });
-  /*
-  * all socket.io events happens here
-  * */
+    /*
+    * all socket.io events happens here
+    * */
     io.of('/hours-lost').on('connection', function (socket) {
       OAuth2Controller(app, socket, passport); // handles all OAuths
       RequestController(app, socket); // handles all GETs to external API

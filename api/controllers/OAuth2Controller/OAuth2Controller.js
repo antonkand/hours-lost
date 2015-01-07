@@ -7,10 +7,11 @@ var User = require('../../models/User.js');
 
 module.exports = function (app, socket, passport) {
   'use strict';
+  // serialize the user into session
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
-  // used to deserialize the user
+  // deserialize the user out of session
   passport.deserializeUser(function(user, done) {
     done(null, user);
   });
@@ -18,5 +19,4 @@ module.exports = function (app, socket, passport) {
   require('./FacebookAuth.js')(app, socket, passport);
   require('./GooglePlusAuth.js')(app, socket, passport);
   require('./InstagramAuth.js')(app, socket, passport);
-  console.log(chalk.cyan('hours-lost ') + chalk.white('OAuth2Controller initialized.'));
 };

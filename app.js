@@ -50,14 +50,9 @@ var start = function () {
         ));
     });
 };
-// handles routing and control of routes
-HoursLostController(app, io);
 
-// if run directly, start server
-if (require.main === module) {
-    start();
-}
-else {
-  throw new Error('currently not supported as required module');
-}
+// main controller
+HoursLostController(app, io);
+start();
+
 
