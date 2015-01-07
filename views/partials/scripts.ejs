@@ -1,14 +1,21 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var main = io.connect('/hours-lost');
+  var sendSession = function (socket) {
+      socket.emit('all:session', document.cookie);
+  };
   var retrieveUsers = function (socket) {
     socket.emit('all:users');
   };
+  var logConnectionToServer = function (socket) {
+      var log = ('hours-lost:\n client socket ' + socket.ids + '\n in namespace ' + socket.nsp + ' connected.');
+      socket.emit('socket:connection', log);
+  };
   main.on('socket:connection', function (data) {
       console.log(data);
+      sendSession(main);
       retrieveUsers(main);
-      var log = ('hours-lost:\n   client socket ' + main.ids + '\n   in namespace ' + main.nsp + ' connected.');
-      main.emit('socket:connection', log);
+      logConnectionToServer(main);
   });
   main.on('twitter:connected', function (data) {
       console.log('twitter:connected ' + data);
@@ -19,9 +26,11 @@
   main.on('twitter:req', function (data) {
       console.log('twitter:req.');
       console.log(data);
-  })
+  });
+  main.on('all:session', function (data) {
+      console.log('all:session');
+  });
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-animate.min.js"></script>
-<script src="js/vendor/sweet-alert.min.js"></script>
 <script src="js/angularbundle.js"></script>

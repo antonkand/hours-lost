@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 var session = require('express-session');
+var sessionStore = new session.MemoryStore;
 var OAuth2Controller = require('./OAuth2Controller/OAuth2Controller.js');
 var RequestController = require('./APIRequestController/APIRequestController.js');
 var User = require('../models/User.js');
@@ -18,16 +19,15 @@ var User = require('../models/User.js');
  * @param Socket.io io: socket connection to use */
 module.exports = function (app, io) {
     app.use(session({
+      cookie: { httpOnly: false },
       secret: config.secretString,
       resave: true,
       saveUninitialized: true,
-      key: 'hourslost.sid'
+      key: 'hourslost.sid',
+      store: sessionStore
     }));
     app.use(passport.initialize());
     app.use(flash());
-    app.get('/spa', function (req, res) {
-      res.render('spa');
-    });
     app.get('/', function (req, res) {
         res.render('index');
     });
@@ -38,6 +38,21 @@ module.exports = function (app, io) {
     * all socket.io events happens here
     * */
     io.of('/hours-lost').on('connection', function (socket) {
+      socket.on('all:session', function (cookie) {
+        var sid = cookie.substring(18, 50); // remove `hourslost.sid=`
+        console.log('all:session');
+        sessionStore.get(sid, function(err, session) {
+          if (err || !session) {
+            console.log('no session found');
+            console.log(session);
+          }
+          else {
+            if (session.passport.user) {
+              console.log(session.passport.user);
+            }
+          }
+        });
+      });
       OAuth2Controller(app, socket, passport); // handles all OAuths
       RequestController(app, socket); // handles all GETs to external API
       // socket connected, celebrate!
