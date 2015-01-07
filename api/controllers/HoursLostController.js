@@ -17,11 +17,11 @@ module.exports = function (app, io, passport) {
        res.render('spa');
     });
     io.of('/hours-lost').on('connection', function (socket) {
+      OAuth2Controller(app, socket, passport);
+      RequestController(app, socket);
       socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
       socket.on('socket:connection', function (data) {
         console.log(chalk.green(data));
       });
     });
-    OAuth2Controller(app, io, passport);
-    RequestController(app);
 };

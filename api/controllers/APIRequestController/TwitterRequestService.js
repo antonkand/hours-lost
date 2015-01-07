@@ -30,7 +30,7 @@ var requestTwitterData = function (req, res) {
 
 module.exports = function (req, res) {
   if (req.user) {
-    return req.user.socialmediaData.twitter ?
+    return req.user.socialmediaData.twitter.id ?
            requestTwitterData(req, res) :
            res.json({ errorMessage: 'no twitter user in session.'});
   }
