@@ -7,7 +7,7 @@ var User = new mongoose.Schema({
       id: String,
       token: String,
       username: String,
-      displayName: String
+      name: String
     },
     facebook: {
       id: String,
@@ -25,7 +25,7 @@ var User = new mongoose.Schema({
       id: String,
       token: String,
       username: String,
-      full_name: String
+      name: String
     },
     tweets: Number,
     facebookPosts: Number,

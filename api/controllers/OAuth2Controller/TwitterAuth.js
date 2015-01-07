@@ -8,7 +8,7 @@ var createNewTwitterUser = function (profile, token) {
   user.socialmediaData.twitter.id = profile.id;
   user.socialmediaData.twitter.token = token;
   user.socialmediaData.twitter.username = profile.username;
-  user.socialmediaData.twitter.displayName = profile.displayName;
+  user.socialmediaData.twitter.name = profile.displayName;
   return user;
 };
 
@@ -30,6 +30,8 @@ module.exports = function (app, socket, passport) {
       passReqToCallback: true
     }, function (req, token, tokenSecret, profile, done) {
       process.nextTick(function() {
+        console.log(req.user);
+        console.log(passport.session.user);
         if (req.user) {
           // match session's stored user with db's user
           socket.emit('twitter:user', 'antonio');
@@ -45,7 +47,7 @@ module.exports = function (app, socket, passport) {
                 user.socialmediaData.twitter.id = profile.id;
                 user.socialmediaData.twitter.token = token;
                 user.socialmediaData.twitter.username = profile.username;
-                user.socialmediaData.twitter.displayName = profile.displayName;
+                user.socialmediaData.twitter.name = profile.displayName;
                 user.save(function (err) {
                   if (err) {
                     throw err;

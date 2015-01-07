@@ -4,8 +4,8 @@
   var sendSession = function (socket) {
       socket.emit('all:session', document.cookie);
   };
-  var retrieveUsers = function (socket) {
-    socket.emit('all:users');
+  var retrieveUser = function (socket) {
+    socket.emit('all:user');
   };
   var logConnectionToServer = function (socket) {
       var log = ('hours-lost:\n client socket ' + socket.ids + '\n in namespace ' + socket.nsp + ' connected.');
@@ -14,7 +14,7 @@
   main.on('socket:connection', function (data) {
       console.log(data);
       sendSession(main);
-      retrieveUsers(main);
+      retrieveUser(main);
       logConnectionToServer(main);
   });
   main.on('twitter:connected', function (data) {
@@ -27,8 +27,11 @@
       console.log('twitter:req.');
       console.log(data);
   });
-  main.on('all:session', function (data) {
-      console.log('all:session');
+  main.on('all:user', function (data) {
+    if (data) {
+        console.log('all:user');
+        console.log(data);
+    }
   });
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js"></script>

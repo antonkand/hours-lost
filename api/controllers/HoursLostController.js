@@ -23,7 +23,6 @@ module.exports = function (app, io) {
       secret: config.secretString,
       resave: true,
       saveUninitialized: true,
-      key: 'hourslost.sid',
       store: sessionStore
     }));
     app.use(passport.initialize());
@@ -37,33 +36,44 @@ module.exports = function (app, io) {
     /*
     * all socket.io events happens here
     * */
-    io.of('/hours-lost').on('connection', function (socket) {
-      socket.on('all:session', function (cookie) {
-        var sid = cookie.substring(18, 50); // remove `hourslost.sid=`
-        console.log('all:session');
-        sessionStore.get(sid, function(err, session) {
-          if (err || !session) {
-            console.log('no session found');
-            console.log(session);
+
+  io.of('/hours-lost').on('connection', function RealTimeController (socket) {
+    this.user = null;
+    var that = this;
+    socket.on('all:session', function (cookie) {
+      var sid = cookie.substring(16, 48); // substring of sid
+      console.log('all:session');
+      sessionStore.get(sid, function(err, session) {
+        if (err || !session) {
+          console.log('no session found');
+          console.log(session);
+        }
+        else {
+          if (session.passport.user) {
+            that.user  = session.passport.user;
+            console.log(that.user);
           }
-          else {
-            if (session.passport.user) {
-              console.log(session.passport.user);
-            }
-          }
-        });
-      });
-      OAuth2Controller(app, socket, passport); // handles all OAuths
-      RequestController(app, socket); // handles all GETs to external API
-      // socket connected, celebrate!
-      socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
-      // log the connected socket
-      socket.on('socket:connection', function (data) {
-        console.log(chalk.green(data));
-      });
-      // retrieve authed users from db
-      socket.on('all:users', function () {
-        console.log('all:users');
+        }
       });
     });
+    OAuth2Controller(app, socket, passport); // handles all OAuths
+    RequestController(app, socket); // handles all GETs to external API
+    // socket connected, celebrate!
+    socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
+    // log the connected socket
+    socket.on('socket:connection', function (data) {
+      console.log(chalk.green(data));
+    });
+    // retrieve authed users from db
+    socket.on('all:user', function () {
+      console.log('all:user');
+      var userWithOutTokens = null;
+      if (that.user) {
+        userWithOutTokens = Object.keys(that.user.socialmediaData).map(function (socialmedia) {
+          return that.user.socialmediaData[socialmedia].name;
+        });
+      }
+      socket.emit('all:user', userWithOutTokens);
+    });
+  });
 };
