@@ -91,7 +91,6 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
                   else {
                     return done(null, user);
                   }
-                  console.log(chalk.green('FacebookAuth: user found in session, twitter credentials:\n'), user);
                 }
               });
             }

@@ -92,7 +92,6 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
                   else {
                     return done(null, user);
                   }
-                  console.log(chalk.green('TwitterAuth: user found in session, twitter credentials:\n'), user);
                 }
               });
             }
