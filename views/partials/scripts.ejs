@@ -20,6 +20,12 @@
   main.on('twitter:connected', function (data) {
       console.log('twitter:connected ' + data);
   });
+  main.on('facebook:connected', function (data) {
+      console.log('facebook:connected ' + data);
+  });
+  main.on('instagram:connected', function (data) {
+      console.log('instagram:connected ' + data);
+  });
   main.on('twitter:user', function (data) {
       console.log('twitter:user received: ' + data);
   });

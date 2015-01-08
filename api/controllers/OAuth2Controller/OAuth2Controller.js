@@ -11,8 +11,9 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
   passport.deserializeUser(function(user, done) {
     done(null, user);
   });
+
   require('./TwitterAuth.js')(app, socket, sessionStore, sid, passport);
-  require('./FacebookAuth.js')(app, socket, passport);
-  require('./GooglePlusAuth.js')(app, socket, passport);
-  require('./InstagramAuth.js')(app, socket, passport);
+  require('./FacebookAuth.js')(app, socket, sessionStore, sid, passport);
+  //require('./GooglePlusAuth.js')(app, socket, sessionStore, sid, passport);
+  require('./InstagramAuth.js')(app, socket, sessionStore, sid, passport);
 };

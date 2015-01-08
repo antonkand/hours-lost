@@ -16,9 +16,11 @@ var createNewTwitterUser = function (profile, token) {
  * oauth2 login through Twitter
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
- * if user is found in session, that session's account is connected to instagram ouath
+ * if user is found in session, that session's account is connected to twitter oauth
  * @param Express Server app: which app to hook the login to
  * @param Socket.io connection io: the socket.io connection to use
+ * @param Passport.MemoryStore sessionStore: custom sessionstore for passport
+ * @param String sid: session id to use with sessionStore
  * @param Passport passport: the configured passport object to use
  * */
 module.exports = function (app, socket, sessionStore, sid, passport) {
@@ -99,18 +101,4 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
      });
     }
   ));
-
-  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-   * routes for OAuths
-   * @callback follows the pattern '/<socialmedia>/callback'
-   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-  app.get('/auth/twitter', passport.authenticate('twitter'));
-  app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-      failureRedirect: '/'
-    }),
-    function(req, res) {
-      socket.emit('twitter:user', 'user');
-      // Successful authentication, redirect to connected state.
-      res.redirect('/connected');
-    });
 };
