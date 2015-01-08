@@ -39,11 +39,13 @@ module.exports = function (app, io) {
 
   io.of('/hours-lost').on('connection', function RealTimeController (socket) {
     this.user = null;
+    this.sid = null;
     var that = this;
     socket.on('all:session', function (cookie) {
-      var sid = cookie.substring(16, 48); // substring of sid
+      that.sid = cookie.substring(16, 48); // substring of sid
+      OAuth2Controller(app, socket, sessionStore, that.sid, passport); // handles all OAuths
       console.log('all:session');
-      sessionStore.get(sid, function(err, session) {
+      sessionStore.get(that.sid, function(err, session) {
         if (err || !session) {
           console.log('no session found');
           console.log(session);
@@ -56,7 +58,6 @@ module.exports = function (app, io) {
         }
       });
     });
-    OAuth2Controller(app, socket, passport); // handles all OAuths
     RequestController(app, socket); // handles all GETs to external API
     // socket connected, celebrate!
     socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
@@ -70,7 +71,8 @@ module.exports = function (app, io) {
       var userWithOutTokens = null;
       if (that.user) {
         userWithOutTokens = Object.keys(that.user.socialmediaData).map(function (socialmedia) {
-          return that.user.socialmediaData[socialmedia].name;
+          // TODO: Specific object for each social media
+          return { name: that.user.socialmediaData[socialmedia].name };
         });
       }
       socket.emit('all:user', userWithOutTokens);

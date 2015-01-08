@@ -1,7 +1,7 @@
 // own deps
 var User = require('../../models/User.js');
 
-module.exports = function (app, socket, passport) {
+module.exports = function (app, socket, sessionStore, sid, passport) {
   'use strict';
   // serialize the user into session
   passport.serializeUser(function(user, done) {
@@ -11,7 +11,7 @@ module.exports = function (app, socket, passport) {
   passport.deserializeUser(function(user, done) {
     done(null, user);
   });
-  require('./TwitterAuth.js')(app, socket, passport);
+  require('./TwitterAuth.js')(app, socket, sessionStore, sid, passport);
   require('./FacebookAuth.js')(app, socket, passport);
   require('./GooglePlusAuth.js')(app, socket, passport);
   require('./InstagramAuth.js')(app, socket, passport);
