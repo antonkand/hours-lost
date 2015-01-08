@@ -79,7 +79,7 @@ module.exports = function (app, io) {
       socket.on('all:session', function (cookie) {
         that.sid = cookie.substring(16, 48); // substring of sid
         // handles all OAuths, requires the session
-        OAuth2Controller(app, socket, sessionStore, that.sid, passport);
+
         console.log('all:session');
         sessionStore.get(that.sid, function(err, session) {
           if (err || !session) {
@@ -94,6 +94,8 @@ module.exports = function (app, io) {
           }
         });
       });
+      // TODO: init with correct sid, outside of socket.on
+      OAuth2Controller(app, socket, sessionStore, that.sid, passport);
       RequestController(app, socket); // handles all GETs to external API
       // socket connected, celebrate!
       socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
