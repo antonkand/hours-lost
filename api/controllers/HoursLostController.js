@@ -40,9 +40,11 @@ module.exports = function (app, io) {
     // instagram
     app.get('/auth/instagram', passport.authenticate('instagram', { scope: 'basic'}));
     app.get('/auth/instagram/callback', passport.authenticate('instagram', {
-      successRedirect: '/connected',
-      failureRedirect: '/'
-    }));
+        failureRedirect: '/'
+      }),
+      function(req, res) {
+        res.redirect('/connected');
+    });
     // twitter
     app.get('/auth/twitter', passport.authenticate('twitter'));
     app.get('/auth/twitter/callback', passport.authenticate('twitter', {
@@ -50,6 +52,22 @@ module.exports = function (app, io) {
     }),
     function(req, res) {
       res.redirect('/connected');
+    });
+    // facebook
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email'}));
+    app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        failureRedirect: '/'
+      }),
+      function(req, res) {
+        res.redirect('/connected');
+      });
+    // google
+    app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile']}));
+    app.get('/auth/google/callback', passport.authenticate('google', {
+        failureRedirect: '/'
+      }),
+      function(req, res) {
+        res.redirect('/connected');
     });
     /*
     * all socket.io events happens here
@@ -60,7 +78,8 @@ module.exports = function (app, io) {
       var that = this;
       socket.on('all:session', function (cookie) {
         that.sid = cookie.substring(16, 48); // substring of sid
-        OAuth2Controller(app, socket, sessionStore, that.sid, passport); // handles all OAuths
+        // handles all OAuths, requires the session
+        OAuth2Controller(app, socket, sessionStore, that.sid, passport);
         console.log('all:session');
         sessionStore.get(that.sid, function(err, session) {
           if (err || !session) {

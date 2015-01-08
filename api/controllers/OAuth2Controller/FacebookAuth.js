@@ -73,7 +73,7 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
                 else {
                   // if user haven't saved previous twitter credentials,
                   // add it to the connected sessions user
-                  if (user === null || !user.socialmediaData.facebook.id) {
+                  if (user && !user.socialmediaData.facebook.id) {
                     user.socialmediaData.facebook.id = profile.id;
                     user.socialmediaData.facebook.token = token;
                     user.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
@@ -100,15 +100,4 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
       });
     }
   ));
-
-  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-   * routes for OAuths
-   * @callback follows the pattern '/<socialmedia>/callback'
-   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-  app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email'}));
-  app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    successRedirect: '/connected',
-    failureRedirect: '/'
-    })
-  );
 };
