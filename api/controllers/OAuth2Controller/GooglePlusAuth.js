@@ -2,7 +2,7 @@
 var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
 var chalk = require('chalk');
-var GoogleStrategy  = require('passport-google-oauth').OAuth2Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var createNewGoogleUser = function (profile, token) {
   var user = new User();
   user.socialmediaData.google.id = profile.id;
@@ -22,7 +22,7 @@ var createNewGoogleUser = function (profile, token) {
  * @param String sid: session id to use with sessionStore
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (app, socket, sessionStore, sid, passport) {
+module.exports = function (app, socket, sessionStore, sid, passport, callback) {
   socket.emit('google:connected', true);
   passport.use(new GoogleStrategy({
       clientID: authCredentials.google.clientId,
@@ -30,14 +30,15 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
       callbackURL: authCredentials.google.callbackURL,
       passReqToCallback: false
     }, function (token, tokenSecret, profile, done) {
-      process.nextTick(function() {
+      process.nextTick(function () {
+        console.log('sid');
         console.log(sid);
-        sessionStore.get(sid, function (err, session ) {
+        sessionStore.get(sid, function (err, session) {
           if (err) {
             throw err;
           }
           if (!session) {
-            User.findOne({ 'socialmediaData.google.id': profile.id }, function(err, user) {
+            User.findOne({'socialmediaData.google.id': profile.id}, function (err, user) {
               // if there is an error, stop everything and return that
               // ie an error connecting to the database
               if (err) {
@@ -51,7 +52,7 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
                 var newUser = createNewGoogleUser(profile, token);
                 console.log(chalk.green('GoogleAuth: new user created', newUser));
                 // save our user into the database
-                newUser.save(function(err) {
+                newUser.save(function (err) {
                   if (err) {
                     throw err;
                   }

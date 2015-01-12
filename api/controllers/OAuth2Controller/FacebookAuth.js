@@ -2,7 +2,7 @@
 var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
 var chalk = require('chalk');
-var FacebookStrategy  = require('passport-facebook').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var createNewFacebookUser = function (profile, token) {
   var user = new User();
   user.socialmediaData.facebook.id = profile.id;
@@ -22,7 +22,7 @@ var createNewFacebookUser = function (profile, token) {
  * @param String sid: session id to use with sessionStore
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (app, socket, sessionStore, sid, passport) {
+module.exports = function (app, socket, sessionStore, sid, passport, callback) {
   socket.emit('facebook:connected', true);
   passport.use(new FacebookStrategy({
       clientID: authCredentials.facebook.clientId,
@@ -30,14 +30,14 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
       callbackURL: authCredentials.facebook.callbackURL,
       passReqToCallback: false
     }, function (token, tokenSecret, profile, done) {
-      process.nextTick(function() {
+      process.nextTick(function () {
         console.log(sid);
-        sessionStore.get(sid, function (err, session ) {
+        sessionStore.get(sid, function (err, session) {
           if (err) {
             throw err;
           }
           if (!session) {
-            User.findOne({ 'socialmediaData.facebook.id': profile.id }, function(err, user) {
+            User.findOne({'socialmediaData.facebook.id': profile.id}, function (err, user) {
               // if there is an error, stop everything and return that
               // ie an error connecting to the database
               if (err) {
@@ -45,17 +45,20 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
               }
               // if the user is found then log them in
               if (user) {
+                callback(user);
                 return done(null, user); // user found, return that user
-              } else {
+              }
+              else {
                 // if there is no user, create them
                 var newUser = createNewFacebookUser(profile, token);
                 console.log(chalk.green('FacebookAuth: new user created', newUser));
                 // save our user into the database
-                newUser.save(function(err) {
+                newUser.save(function (err, user) {
                   if (err) {
                     throw err;
                   }
-                  return done(null, newUser);
+                  callback(user, 'facebook');
+                  return done(null, user);
                 });
               }
             });
@@ -83,12 +86,14 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
                         throw err;
                       }
                       else {
+                        callback(user);
                         return done(null, user);
                       }
                     });
                   }
                   // user is already in db, use that account
                   else {
+                    callback(user);
                     return done(null, user);
                   }
                 }

@@ -1,7 +1,7 @@
 'use strict';
 var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
-var InstagramStrategy  = require('passport-instagram').Strategy;
+var InstagramStrategy = require('passport-instagram').Strategy;
 var chalk = require('chalk');
 var createNewInstagramUser = function (profile, token) {
   var user = new User();
@@ -22,7 +22,7 @@ var createNewInstagramUser = function (profile, token) {
  * @param String sid: session id to use with sessionStore
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (app, socket, sessionStore, sid, passport) {
+module.exports = function (app, socket, sessionStore, sid, passport, callback) {
   socket.emit('instagram:connected', true);
   passport.use(new InstagramStrategy({
       clientID: authCredentials.instagram.clientId,
@@ -30,14 +30,14 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
       callbackURL: authCredentials.instagram.callbackURL,
       passReqToCallback: false
     }, function (token, tokenSecret, profile, done) {
-      process.nextTick(function() {
+      process.nextTick(function () {
         console.log(sid);
-        sessionStore.get(sid, function (err, session ) {
+        sessionStore.get(sid, function (err, session) {
           if (err) {
             throw err;
           }
           if (!session) {
-            User.findOne({ 'socialmediaData.instagram.id': profile.id }, function(err, user) {
+            User.findOne({'socialmediaData.instagram.id': profile.id}, function (err, user) {
               // if there is an error, stop everything and return that
               // ie an error connecting to the database
               if (err) {
@@ -51,7 +51,7 @@ module.exports = function (app, socket, sessionStore, sid, passport) {
                 var newUser = createNewInstagramUser(profile, token);
                 console.log(chalk.green('InstagramAuth: new user created', newUser));
                 // save our user into the database
-                newUser.save(function(err) {
+                newUser.save(function (err) {
                   if (err) {
                     throw err;
                   }

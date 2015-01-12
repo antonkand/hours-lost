@@ -21,14 +21,14 @@ var mongoose = require('mongoose');
 // morgan used for logging when developing
 // logging once per 24 h in prod
 switch (app.get('env')) {
-    case 'development':
-        app.use(morgan('dev'));
-        break;
-    case 'production':
-        app.use(logger({
-            path: __dirname + '/log/requests.log'
-        }));
-        break;
+  case 'development':
+    app.use(morgan('dev'));
+    break;
+  case 'production':
+    app.use(logger({
+      path: __dirname + '/log/requests.log'
+    }));
+    break;
 }
 
 app.set('views', __dirname + '/views');
@@ -41,14 +41,10 @@ mongoose.connect(dbConnection);
 
 // kickstarts the machinery
 var start = function () {
-    server.listen(app.get('port'), function () {
-        console.log(chalk.cyan('hours-lost ' +
-                    chalk.white('port: ' +
-                    app.get('port') +
-                    '. environment: ' +
-                    app.get('env') + '.')
-        ));
-    });
+  server.listen(app.get('port'), function () {
+    console.log(chalk.cyan('hours-lost ' + chalk.white('port: ' + app.get('port') + '. environment: ' + app.get('env') + '.')
+    ));
+  });
 };
 
 // main controller

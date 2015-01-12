@@ -28,9 +28,9 @@
       };
 
       /*
-      * this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
-      * each estimate can be overridden by the user
-      * */
+       * this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
+       * each estimate can be overridden by the user
+       * */
       this.data = {
         total: {
           minutes: 0
@@ -55,8 +55,8 @@
         gplus: false
       };
       /*
-      * gets all social media data authed by the user
-      * */
+       * gets all social media data authed by the user
+       * */
       this.getSocialMediaData = function () {
         Object.keys(that.activeAccounts)
           .filter(function (authedMedia) {
@@ -65,24 +65,24 @@
           .forEach(function (mediaToGET) {
             console.log(mediaToGET);
             $http.get('/socialdata/' + mediaToGET)
-              .success(function(data, status, headers, config) {
+              .success(function (data, status, headers, config) {
                 console.log(data);
                 console.log(status);
               })
-              .error(function(data, status, headers, config) {
+              .error(function (data, status, headers, config) {
                 console.log(data);
                 console.log(status);
               });
           });
       };
       /*
-      * returns true if any social media has authed
-      * */
+       * returns true if any social media has authed
+       * */
       this.userHasAuthed = function () {
         if (this.activeAccounts.instagram === true ||
             this.activeAccounts.facebook === true ||
             this.activeAccounts.gplus === true ||
-            this.activeAccounts.twitter === true ) {
+            this.activeAccounts.twitter === true) {
           return true;
         }
         else {
@@ -90,18 +90,19 @@
         }
       }.bind(this);
       /*
-      * all directives use this var as passed in data
-      * */
+       * all directives use this var as passed in data
+       * */
       this.data.total.minutes = calculateMinutes(this.data.socialMediaPosts, this.data.estimates);
       /*
-      * the message to share with your friends, either singular or plural depending on time spent
-      * */
+       * the message to share with your friends, either singular or plural depending on time spent
+       * */
       this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
     }]);
 })();
 
 
-;(function () {
+;
+(function () {
   'use strict';
   angular
     .module('OAuth2Module', [])
@@ -116,11 +117,12 @@
       };
     })
     .controller('OAuth2Controller', OAuth2Controller);
-    function OAuth2Controller () {
-      console.log('OAuth2Controller: initialized');
-    }
+  function OAuth2Controller () {
+    console.log('OAuth2Controller: initialized');
+  }
 })();
-;(function () {
+;
+(function () {
   'use strict';
   angular
     .module('SharingModule', [])
@@ -161,15 +163,19 @@
     })
     .controller('CalculatedResultController', CalculatedResultController(SweetAlert))
     .factory('SweetAlert', SweetAlert);
-  function CalculatedResultController () {}
+  function CalculatedResultController () {
+  }
+
   function SweetAlert () {
     var alerts = {
       error: function (title, text, confirmButtonText) {
         if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({ title: title,
+          return swal({
+            title: title,
             text: text,
             type: 'error',
-            confirmButtonText: confirmButtonText });
+            confirmButtonText: confirmButtonText
+          });
         }
         else {
           return false;
@@ -177,9 +183,11 @@
       },
       info: function (title, text, confirmButtonText) {
         if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({ title: title,
+          return swal({
+            title: title,
             text: text,
-            confirmButtonText: confirmButtonText });
+            confirmButtonText: confirmButtonText
+          });
         }
         else {
           return false;
@@ -209,5 +217,6 @@
   function CustomizationSliderController ($scope) {
     console.log('CustomizationSliderController: initialized');
   }
+
   CustomizationSliderController.$inject = ["$scope"];
 })();

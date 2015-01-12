@@ -5,13 +5,13 @@
       socket.emit('all:session', document.cookie);
   };
   var retrieveUser = function (socket) {
-    socket.emit('all:user');
+      socket.emit('all:user');
   };
   var logConnectionToServer = function (socket) {
       var log = ('hours-lost:\n client socket ' + socket.ids + '\n in namespace ' + socket.nsp + ' connected.');
       socket.emit('socket:connection', log);
   };
-  main.on('socket:connection', function (data) {
+  main.once('socket:connection', function (data) {
       console.log(data);
       sendSession(main);
       retrieveUser(main);
@@ -37,10 +37,10 @@
       console.log(data);
   });
   main.on('all:user', function (data) {
-    if (data) {
-        console.log('all:user');
-        console.log(data);
-    }
+      console.log('all:user');
+      if (data) {
+          console.log(data);
+      }
   });
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js"></script>
