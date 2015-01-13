@@ -43,7 +43,7 @@ module.exports = function (socket, session, passport, callback) {
               return done(null, user);
             }
             else {
-              // add the twitter credentials to the existing user if user is found without credentials
+              // add the google credentials to the existing user if user is found without credentials
               var existingUser = addGoogleCredentialsToUser(profile, token, user);
               existingUser.save(function (err, user) {
                 if (err) {

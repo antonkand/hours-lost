@@ -32,7 +32,6 @@ module.exports = function (socket, session, passport, callback) {
         // or use the credentials from that db object if facebook credentials are already stored
         if (session.passport.user) {
           console.log('user found in session');
-          console.log(session.passport.user);
           User.findOne({'_id': session.passport.user._id}, function (err, user) {
             // if err, throw it
             if (err) {
