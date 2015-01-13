@@ -34,8 +34,6 @@ module.exports = function (socket, session, passport, callback) {
           console.log('user found in session');
           console.log(session.passport.user);
           User.findOne({'_id': session.passport.user._id}, function (err, user) {
-            console.log('user');
-            console.log(user);
             // if err, throw it
             if (err) {
               throw err;

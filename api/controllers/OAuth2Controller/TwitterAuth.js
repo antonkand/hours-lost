@@ -25,8 +25,8 @@ module.exports = function (socket, session, passport, callback) {
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
       callbackURL: authCredentials.twitter.callbackURL,
-      passReqToCallback: true
-    }, function (req, token, tokenSecret, profile, done) {
+      passReqToCallback: false
+    }, function (token, tokenSecret, profile, done) {
       process.nextTick(function () {
         // if user is found in session, save the twitter credentials to that db object
         // or use the credentials from that db object if twitter credentials are already stored
@@ -34,8 +34,6 @@ module.exports = function (socket, session, passport, callback) {
           console.log('user found in session');
           console.log(session.passport.user);
           User.findOne({'_id': session.passport.user._id}, function (err, user) {
-            console.log('user');
-            console.log(user);
             // if err, throw it
             if (err) {
               throw err;
