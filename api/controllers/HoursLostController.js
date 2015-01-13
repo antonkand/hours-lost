@@ -129,7 +129,7 @@ module.exports = function (app, io) {
           else {
             // TODO: init with correct sid, outside of socket.on
             // handles all OAuths, requires the session
-            OAuth2Controller(app, socket, passport, session);
+            OAuth2Controller(socket, session, passport);
             //if (session.passport.user) {
             //  console.log('session.passport.user');
             //  that.session = session.passport.user;

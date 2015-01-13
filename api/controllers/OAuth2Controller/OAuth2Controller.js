@@ -2,7 +2,7 @@
 // own deps
 var chalk = require('chalk');
 var User = require('../../models/User.js');
-module.exports = function (app, socket, passport, session) {
+module.exports = function (socket, session, passport) {
   var storeUser = function (user) {
     console.log('user');
     console.log(user);
