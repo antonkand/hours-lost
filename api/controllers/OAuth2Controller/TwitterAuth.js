@@ -16,11 +16,10 @@ var addTwitterCredentialsToUser = function (profile, token, existingUser) {
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
  * if user is found in session, that session's account is connected to twitter oauth
- * @param Express Server app: which app to hook the login to
  * @param Socket.io connection io: the socket.io connection to use
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (app, socket, session, passport, callback) {
+module.exports = function (socket, session, passport, callback) {
   socket.emit('twitter:connected', true);
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
@@ -33,7 +32,8 @@ module.exports = function (app, socket, session, passport, callback) {
         // or use the credentials from that db object if twitter credentials are already stored
         if (session.passport.user) {
           console.log('user found in session');
-          User.findOne({'socialmediaData.twitter.id': profile.id}, function (err, user) {
+          console.log(session.passport.user);
+          User.findOne({'_id': session.passport.user._id}, function (err, user) {
             console.log('user');
             console.log(user);
             // if err, throw it
@@ -41,7 +41,7 @@ module.exports = function (app, socket, session, passport, callback) {
               throw err;
             }
             // if user is found in db and have twitter credentials, use that
-            if (user) {
+            if (user && user.socialmediaData.twitter.id) {
               return done(null, user);
             }
             else {

@@ -2,7 +2,7 @@
 // own deps
 var chalk = require('chalk');
 var User = require('../../models/User.js');
-module.exports = function (app, socket, sessionStore, sid, passport, session) {
+module.exports = function (app, socket, passport, session) {
   var storeUser = function (user) {
     console.log('user');
     console.log(user);
@@ -23,10 +23,8 @@ module.exports = function (app, socket, sessionStore, sid, passport, session) {
   passport.deserializeUser(function (user, done) {
     done(null, user);
   });
-  require('./TwitterAuth.js')(app, socket, session, passport, storeUser);
-  //require('./TwitterAuth.js')(app, socket, sessionStore, sid, passport, storeUser);
-
-  require('./FacebookAuth.js')(app, socket, sessionStore, sid, passport, storeUser);
-  require('./GooglePlusAuth.js')(app, socket, sessionStore, sid, passport, storeUser);
-  require('./InstagramAuth.js')(app, socket, sessionStore, sid, passport, storeUser);
+  require('./TwitterAuth.js')(socket, session, passport, storeUser);
+  require('./FacebookAuth.js')(socket, session, passport, storeUser);
+  //require('./GooglePlusAuth.js')(app, socket, sessionStore, sid, passport, storeUser);
+  //require('./InstagramAuth.js')(app, socket, sessionStore, sid, passport, storeUser);
 };

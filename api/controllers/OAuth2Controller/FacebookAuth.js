@@ -3,8 +3,8 @@ var User = require('../../models/User.js');
 var authCredentials = require('../../../config/auth/index');
 var chalk = require('chalk');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var createNewFacebookUser = function (profile, token) {
-  var user = new User();
+var addFacebookCredentialsToUser = function (profile, token, existingUser) {
+  var user = existingUser ? existingUser : new User();
   user.socialmediaData.facebook.id = profile.id;
   user.socialmediaData.facebook.token = token;
   user.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
@@ -16,13 +16,10 @@ var createNewFacebookUser = function (profile, token) {
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
  * if user is found in session, that session's account is connected to facebook oauth
- * @param Express Server app: which app to hook the login to
  * @param Socket.io connection io: the socket.io connection to use
- * @param Passport.MemoryStore sessionStore: custom sessionstore for passport
- * @param String sid: session id to use with sessionStore
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (app, socket, sessionStore, sid, passport, callback) {
+module.exports = function (socket, session, passport, callback) {
   socket.emit('facebook:connected', true);
   passport.use(new FacebookStrategy({
       clientID: authCredentials.facebook.clientId,
@@ -31,77 +28,63 @@ module.exports = function (app, socket, sessionStore, sid, passport, callback) {
       passReqToCallback: false
     }, function (token, tokenSecret, profile, done) {
       process.nextTick(function () {
-        console.log(sid);
-        sessionStore.get(sid, function (err, session) {
-          if (err) {
-            throw err;
-          }
-          if (!session) {
-            User.findOne({'socialmediaData.facebook.id': profile.id}, function (err, user) {
-              // if there is an error, stop everything and return that
-              // ie an error connecting to the database
-              if (err) {
-                return done(err);
-              }
-              // if the user is found then log them in
-              if (user) {
-                callback(user);
-                return done(null, user); // user found, return that user
-              }
-              else {
-                // if there is no user, create them
-                var newUser = createNewFacebookUser(profile, token);
-                console.log(chalk.green('FacebookAuth: new user created', newUser));
-                // save our user into the database
-                newUser.save(function (err, user) {
-                  if (err) {
-                    throw err;
-                  }
-                  callback(user, 'facebook');
-                  return done(null, user);
-                });
-              }
-            });
-          }
-          else {
-            if (session.passport.user) {
-              console.log(chalk.green('TwitterAuth: session found'));
-              console.log(session.passport.user);
-              // match session's stored user with db's user
-              User.findOne({'_id': session.passport.user._id}, function (err, user) {
-                // return if error is thrown when connecting to db, etc
+        // if user is found in session, save the facebook credentials to that db object
+        // or use the credentials from that db object if facebook credentials are already stored
+        if (session.passport.user) {
+          console.log('user found in session');
+          console.log(session.passport.user);
+          User.findOne({'_id': session.passport.user._id}, function (err, user) {
+            console.log('user');
+            console.log(user);
+            // if err, throw it
+            if (err) {
+              throw err;
+            }
+            // if user is found in db and have facebook credentials, use that
+            if (user && user.socialmediaData.facebook.id) {
+              return done(null, user);
+            }
+            else {
+              // add the facebook credentials to the existing user if user is found without credentials
+              var existingUser = addFacebookCredentialsToUser(profile, token, user);
+              existingUser.save(function (err, user) {
                 if (err) {
-                  return done(err);
+                  throw err;
                 }
-                else {
-                  // if user haven't saved previous twitter credentials,
-                  // add it to the connected sessions user
-                  if (user && !user.socialmediaData.facebook.id) {
-                    user.socialmediaData.facebook.id = profile.id;
-                    user.socialmediaData.facebook.token = token;
-                    user.socialmediaData.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
-                    user.socialmediaData.facebook.email = profile.emails[0].value;
-                    user.save(function (err) {
-                      if (err) {
-                        throw err;
-                      }
-                      else {
-                        callback(user);
-                        return done(null, user);
-                      }
-                    });
-                  }
-                  // user is already in db, use that account
-                  else {
-                    callback(user);
-                    return done(null, user);
-                  }
-                }
+                console.log(chalk.green('FacebookAuth: existing user extended with facebook credentials', user));
+                return done(null, user);
               });
             }
-          }
-        });
+          });
+        }
+        // no user is found in session
+        else {
+          console.log('no user found in session');
+          // check db for profile id returned
+          User.findOne({'socialmediaData.facebook.id': profile.id}, function (err, user) {
+            // if err, throw it
+            if (err) {
+              return done(err);
+            }
+            // if the user is found, auth
+            if (user) {
+              return done(null, user);
+            }
+            else {
+              // if there is no user, create them
+              var newUser = addFacebookCredentialsToUser(profile, token, null);
+              // save our user into the database
+              newUser.save(function (err, user) {
+                if (err) {
+                  throw err;
+                }
+                console.log(chalk.green('FacebookAuth: new user created', user));
+                return done(null, user);
+              });
+            }
+          });
+        }
       });
-    }
-  ));
+    })
+  );
 };

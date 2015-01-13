@@ -81,7 +81,7 @@ module.exports = function (app, io) {
     this.session = null;
     this.sid = null;
     var that = this;
-    socket.once('all:session', function (cookie) {
+    socket.on('all:session', function (cookie) {
       //* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
       // * routes for OAuths                                        *
       // * @callback follows the pattern '/<socialmedia>/callback'  *
@@ -129,7 +129,7 @@ module.exports = function (app, io) {
           else {
             // TODO: init with correct sid, outside of socket.on
             // handles all OAuths, requires the session
-            OAuth2Controller(app, socket, sessionStore, that.sid, passport, session);
+            OAuth2Controller(app, socket, passport, session);
             //if (session.passport.user) {
             //  console.log('session.passport.user');
             //  that.session = session.passport.user;
