@@ -82,67 +82,21 @@ module.exports = function (app, io) {
     this.sid = null;
     var that = this;
     socket.on('all:session', function (cookie) {
-      //* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-      // * routes for OAuths                                        *
-      // * @callback follows the pattern '/<socialmedia>/callback'  *
-      // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-      // twitter
-      app.get('/auth/twitter', passport.authenticate('twitter'));
-      app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-          failureRedirect: '/'
-        }),
-        function (req, res) {
-          res.redirect('/connected');
-        });
-      // instagram
-      app.get('/auth/instagram', passport.authenticate('instagram', {scope: 'basic'}));
-      app.get('/auth/instagram/callback', passport.authenticate('instagram', {
-          failureRedirect: '/'
-        }),
-        function (req, res) {
-          res.redirect('/connected');
-        });
-      // facebook
-      app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
-      app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-          failureRedirect: '/'
-        }),
-        function (req, res) {
-          res.redirect('/connected');
-        });
-      // google
-      app.get('/auth/google', passport.authenticate('google', {scope: ['email', 'profile']}));
-      app.get('/auth/google/callback', passport.authenticate('google', {
-          failureRedirect: '/'
-        }),
-        function (req, res) {
-          res.redirect('/connected');
-        });
       that.sid = cookie.substring(16, 48); // substring of sid
       console.log('all:session');
       sessionStore.get(that.sid, function (err, session) {
           if (err || !session) {
             console.log('no session found');
-            console.log(session);
-            OAuth2Controller(app, socket, sessionStore, that.sid, passport, null);
+            OAuth2Controller(app, socket, session, passport);
           }
           else {
-            // TODO: init with correct sid, outside of socket.on
-            // handles all OAuths, requires the session
-            OAuth2Controller(socket, session, passport);
-            //if (session.passport.user) {
-            //  console.log('session.passport.user');
-            //  that.session = session.passport.user;
-            //  console.log(that.session);
-            //}
-            //else {
-            //  console.log('that.user');
-            //  console.log(that.user);
-            //}
+            console.log('no session found');
+            console.log(session);
+            OAuth2Controller(app, socket, session, passport);
           }
         });
     });
-    RequestController(app, socket); // handles all GETs to external API
+    //RequestController(socket, session); // handles all GETs to external API
     // socket connected, celebrate!
     socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
     // log the connected socket
