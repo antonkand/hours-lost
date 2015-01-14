@@ -1,47 +1,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var main = io.connect('/hours-lost');
-  var sendSession = function (socket) {
-      socket.emit('all:session', document.cookie);
-  };
-  var retrieveUser = function (socket) {
-      socket.emit('all:user');
-  };
-  var logConnectionToServer = function (socket) {
-      var log = ('hours-lost:\n client socket ' + socket.ids + '\n in namespace ' + socket.nsp + ' connected.');
-      socket.emit('socket:connection', log);
-  };
-  main.once('socket:connection', function (data) {
-      console.log(data);
-      sendSession(main);
-      retrieveUser(main);
-      logConnectionToServer(main);
-  });
-  main.on('twitter:connected', function (data) {
-      console.log('twitter:connected ' + data);
-  });
-  main.on('facebook:connected', function (data) {
-      console.log('facebook:connected ' + data);
-  });
-  main.on('instagram:connected', function (data) {
-      console.log('instagram:connected ' + data);
-  });
-  main.on('google:connected', function (data) {
-      console.log('google:connected ' + data);
-  });
-  main.on('twitter:user', function (data) {
-      console.log('twitter:user received: ' + data);
-  });
-  main.on('twitter:req', function (data) {
-      console.log('twitter:req.');
-      console.log(data);
-  });
-  main.on('all:user', function (data) {
-      console.log('all:user');
-      if (data) {
-          console.log(data);
-      }
-  });
+
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-animate.min.js"></script>

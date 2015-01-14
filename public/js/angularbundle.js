@@ -8,8 +8,7 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    //.controller('HoursLostController', HoursLostController($http));
-    .controller('HoursLostController', ["$http", function HoursLostController ($http) {
+    .controller('HoursLostController', ["$http", "SocketHandler", function HoursLostController ($http, SocketHandler) {
       var that = this;
       console.log('HoursLostController: initialized');
       /*
@@ -28,9 +27,9 @@
       };
 
       /*
-       * this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
-       * each estimate can be overridden by the user
-       * */
+      * this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
+      * each estimate can be overridden by the user
+      * */
       this.data = {
         total: {
           minutes: 0
@@ -55,8 +54,8 @@
         gplus: false
       };
       /*
-       * gets all social media data authed by the user
-       * */
+      * gets all social media data authed by the user
+      * */
       this.getSocialMediaData = function () {
         Object.keys(that.activeAccounts)
           .filter(function (authedMedia) {
@@ -65,24 +64,24 @@
           .forEach(function (mediaToGET) {
             console.log(mediaToGET);
             $http.get('/socialdata/' + mediaToGET)
-              .success(function (data, status, headers, config) {
+              .success(function(data, status, headers, config) {
                 console.log(data);
                 console.log(status);
               })
-              .error(function (data, status, headers, config) {
+              .error(function(data, status, headers, config) {
                 console.log(data);
                 console.log(status);
               });
           });
       };
       /*
-       * returns true if any social media has authed
-       * */
+      * returns true if any social media has authed
+      * */
       this.userHasAuthed = function () {
         if (this.activeAccounts.instagram === true ||
             this.activeAccounts.facebook === true ||
             this.activeAccounts.gplus === true ||
-            this.activeAccounts.twitter === true) {
+            this.activeAccounts.twitter === true ) {
           return true;
         }
         else {
@@ -90,19 +89,104 @@
         }
       }.bind(this);
       /*
-       * all directives use this var as passed in data
-       * */
+      * all directives use this var as passed in data
+      * */
       this.data.total.minutes = calculateMinutes(this.data.socialMediaPosts, this.data.estimates);
       /*
-       * the message to share with your friends, either singular or plural depending on time spent
-       * */
+      * the message to share with your friends, either singular or plural depending on time spent
+      * */
       this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
     }]);
 })();
 
 
-;
-(function () {
+/*
+* @description: SocketHandler
+* returns an object for easy Socket.io access
+* @method emit: usage SocketHandler.emit('eventString', data)
+* @method addListener: usage SocketHandler.addListener('eventString', callbackFunction)
+* */
+;(function () {
+  'use strict';
+  angular.module('HoursLostApp')
+    .factory('SocketHandler', function () {
+      var socketHandler = {};
+      socketHandler.socket = io.connect('/hours-lost');
+      /*
+      * @description:
+      * uses the socket to emit data
+      * facade for general socket.io emit
+      * @example:
+      * `var emit = socketHandler.emit;
+      * emit('guru', { douglas: 'crockford' });
+      * @param String eventString: event to emit
+      * @param Object, Array, String, etc [data]: data to emit through socket. If nothing is passed in as data, `true` is passed
+      * */
+      socketHandler.emit = function (eventString, data) {
+        var emittedData = data ? data : true;
+        socketHandler.socket.emit(eventString, emittedData);
+      };
+      /*
+      * @description:
+      * adds a listener to the socket, using socket.io's .on
+      * @param String eventString: which event to listen .on
+      * @param Function callback: callback to pass data to.
+      * */
+      socketHandler.addListener = function (eventString, callback) {
+        socketHandler.socket.on(eventString, function (data) {
+          callback(data);
+        });
+      };
+      /*
+      * socket.io events
+      * */
+      var emit = socketHandler.emit;
+      var on = socketHandler.addListener;
+      var sendSession = function () {
+        emit('all:session', document.cookie);
+      };
+      var retrieveUser = function () {
+        emit('all:user');
+      };
+      var logConnectionToServer = function () {
+        emit('socket:connection', ('hours-lost:\n client socket ' + socketHandler.socket.ids + '\n in namespace ' + socketHandler.socket.nsp + ' connected.'));
+      };
+      on('socket:connection', function (data) {
+        console.log(data);
+        sendSession();
+        retrieveUser();
+        logConnectionToServer();
+      });
+      on('twitter:connected', function (data) {
+        console.log('twitter:connected ' + data);
+      });
+      on('facebook:connected', function (data) {
+        console.log('facebook:connected ' + data);
+      });
+      on('instagram:connected', function (data) {
+        console.log('instagram:connected ' + data);
+      });
+      on('google:connected', function (data) {
+        console.log('google:connected ' + data);
+      });
+      on('twitter:user', function (data) {
+        console.log('twitter:user received: ' + data);
+      });
+      on('twitter:req', function (data) {
+        console.log('twitter:req.');
+        console.log(data);
+      });
+      on('all:user', function (data) {
+        console.log('all:user');
+        if (data) {
+          console.log(data);
+        }
+      });
+       return socketHandler;
+    });
+})();
+
+;(function () {
   'use strict';
   angular
     .module('OAuth2Module', [])
@@ -117,12 +201,11 @@
       };
     })
     .controller('OAuth2Controller', OAuth2Controller);
-  function OAuth2Controller () {
-    console.log('OAuth2Controller: initialized');
-  }
+    function OAuth2Controller () {
+      console.log('OAuth2Controller: initialized');
+    }
 })();
-;
-(function () {
+;(function () {
   'use strict';
   angular
     .module('SharingModule', [])
@@ -163,19 +246,15 @@
     })
     .controller('CalculatedResultController', CalculatedResultController(SweetAlert))
     .factory('SweetAlert', SweetAlert);
-  function CalculatedResultController () {
-  }
-
+  function CalculatedResultController () {}
   function SweetAlert () {
     var alerts = {
       error: function (title, text, confirmButtonText) {
         if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({
-            title: title,
+          return swal({ title: title,
             text: text,
             type: 'error',
-            confirmButtonText: confirmButtonText
-          });
+            confirmButtonText: confirmButtonText });
         }
         else {
           return false;
@@ -183,11 +262,9 @@
       },
       info: function (title, text, confirmButtonText) {
         if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({
-            title: title,
+          return swal({ title: title,
             text: text,
-            confirmButtonText: confirmButtonText
-          });
+            confirmButtonText: confirmButtonText });
         }
         else {
           return false;
@@ -217,6 +294,5 @@
   function CustomizationSliderController ($scope) {
     console.log('CustomizationSliderController: initialized');
   }
-
   CustomizationSliderController.$inject = ["$scope"];
 })();

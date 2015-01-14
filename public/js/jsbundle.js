@@ -1,2 +1,1 @@
-"use strict";
-console.log("example");
+"use strict";console.log("example");

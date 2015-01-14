@@ -8,8 +8,7 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    //.controller('HoursLostController', HoursLostController($http));
-    .controller('HoursLostController', function HoursLostController ($http) {
+    .controller('HoursLostController', function HoursLostController ($http, SocketHandler) {
       var that = this;
       console.log('HoursLostController: initialized');
       /*
