@@ -8,7 +8,7 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    .controller('HoursLostController', ["$http", "SocketHandler", function HoursLostController ($http, SocketHandler) {
+    .controller('HoursLostController', ["$http", "SocketEvents", function HoursLostController ($http, SocketEvents) {
       var that = this;
       console.log('HoursLostController: initialized');
       /*
@@ -137,11 +137,20 @@
           callback(data);
         });
       };
+      return socketHandler;
+    });
+})();
+
+;
+(function () {
+  'use strict';
+  angular.module('HoursLostApp')
+    .factory('SocketEvents', ["SocketHandler", function (SocketHandler) {
       /*
-      * socket.io events
-      * */
-      var emit = socketHandler.emit;
-      var on = socketHandler.addListener;
+       * socket.io events
+       * */
+      var emit = SocketHandler.emit;
+      var on = SocketHandler.addListener;
       var sendSession = function () {
         emit('all:session', document.cookie);
       };
@@ -149,7 +158,7 @@
         emit('all:user');
       };
       var logConnectionToServer = function () {
-        emit('socket:connection', ('hours-lost:\n client socket ' + socketHandler.socket.ids + '\n in namespace ' + socketHandler.socket.nsp + ' connected.'));
+        emit('socket:connection', ('hours-lost:\n client socket ' + SocketHandler.socket.ids + '\n in namespace ' + SocketHandler.socket.nsp + ' connected.'));
       };
       on('socket:connection', function (data) {
         console.log(data);
@@ -182,10 +191,12 @@
           console.log(data);
         }
       });
-       return socketHandler;
-    });
+      // we won't be exposing the events to controllers,
+      // only injection is needed
+      // so: only log that they've been injected
+      return {log: console.log('SocketEvents: injected')};
+    }]);
 })();
-
 ;(function () {
   'use strict';
   angular

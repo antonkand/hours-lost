@@ -20,7 +20,6 @@ var addTwitterCredentialsToUser = function (profile, token, existingUser) {
  * @param Passport passport: the configured passport object to use
  * */
 module.exports = function (socket, session, passport, callback) {
-  socket.emit('twitter:connected', true);
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
@@ -40,6 +39,7 @@ module.exports = function (socket, session, passport, callback) {
             }
             // if user is found in db and have twitter credentials, use that
             if (user && user.socialmediaData.twitter.id) {
+              socket.emit('twitter:connected', user);
               return done(null, user);
             }
             else {
@@ -49,6 +49,7 @@ module.exports = function (socket, session, passport, callback) {
                 if (err) {
                   throw err;
                 }
+                socket.emit('twitter:connected', user);
                 console.log(chalk.green('TwitterAuth: existing user extended with twitter credentials', user));
                 return done(null, user);
               });
@@ -66,6 +67,7 @@ module.exports = function (socket, session, passport, callback) {
             }
             // if the user is found, auth
             if (user) {
+              socket.emit('twitter:connected', user);
               return done(null, user);
             }
             else {
@@ -77,6 +79,7 @@ module.exports = function (socket, session, passport, callback) {
                   throw err;
                 }
                 console.log(chalk.green('TwitterAuth: new user created', user));
+                socket.emit('twitter:connected', user);
                 return done(null, user);
               });
             }
