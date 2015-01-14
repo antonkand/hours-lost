@@ -49,52 +49,54 @@
           instagram: 7
         }
       };
-      this.accounts = {
-        instagram: { active: false },
-        twitter: { active: true },
-        facebook: { active: true },
-        gplus: { active: true}
+      this.user = {
+        id: null,
+        accounts: [
+          {
+            media: 'instagram',
+            name: null,
+            id: 123
+          },
+          {
+            media: 'facebook',
+            name: null,
+            id: 123
+          },
+          {
+            media: 'twitter',
+            name: null,
+            id: 123
+          },
+          {
+            media: 'gplus',
+            name: 'johan',
+            id: 123
+          }
+        ]
       };
       /*
       * gets all social media data authed by the user
       * */
       this.getSocialMediaData = function () {
-        Object.keys(that.accounts)
-          .filter(function (authedMedia) {
-            console.log(authedMedia);
-            return that.accounts[authedMedia].active === true;
+       that.user.accounts
+          .filter(function (site) {
+            console.log(site.name);
+             return that.user.accounts[site.name] !== null;
           })
           .forEach(function (socialmedia) {
-            console.log(socialmedia);
-            emit('get:' + socialmedia, socialmedia);
+            console.log('socialmedia');
+            console.log(socialmedia.media);
+            emit('get:' + socialmedia.media, socialmedia);
           });
       };
-       //this.getSocialMediaData = function () {
-      //  Object.keys(that.accounts)
-      //    .filter(function (authedMedia) {
-      //      return that.accounts[authedMedia] === true;
-      //    })
-      //    .forEach(function (mediaToGET) {
-      //      console.log(mediaToGET);
-      //      $http.get('/socialdata/' + mediaToGET)
-      //        .success(function(data, status, headers, config) {
-      //          console.log(data);
-      //          console.log(status);
-      //        })
-      //        .error(function(data, status, headers, config) {
-      //          console.log(data);
-      //          console.log(status);
-      //        });
-      //    });
-      //};
       /*
       * returns true if any social media has authed
       * */
       this.userHasAuthed = function () {
-        if (this.accounts.instagram === true ||
-            this.accounts.facebook === true ||
-            this.accounts.gplus === true ||
-            this.accounts.twitter === true ) {
+        if (this.user.instagram === true ||
+            this.user.facebook === true ||
+            this.user.gplus === true ||
+            this.user.twitter === true ) {
           return true;
         }
         else {

@@ -55,7 +55,6 @@ module.exports = function (app, io) {
           }
           else {
             console.log('session found');
-            console.log(session);
             that.session = session;
             OAuth2Controller(app, socket, session, passport);
           }
@@ -71,8 +70,17 @@ module.exports = function (app, io) {
     // retrieve authed users from db
     socket.on('all:user', function () {
       console.log('all:user');
-      if (that.user || that.session) {
-        socket.emit('all:user', { thatuser: that.user, thatsession: that.session });
+      if (that.session && that.session.passport.user) {
+        var user = {};
+        user.user = Object.keys(that.session.passport.user.socialmediaData).map(function (socialmedia) {
+          console.log(that.session.passport.user.socialmediaData[socialmedia].name);
+          return {
+            name: that.session.passport.user.socialmediaData[socialmedia].name,
+            media: socialmedia,
+            user: that.session.passport.user._id
+          };
+        });
+        socket.emit('all:user', user);
       }
     });
     socket.on('get:twitter', function (data) {
