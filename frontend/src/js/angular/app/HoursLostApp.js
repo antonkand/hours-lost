@@ -8,8 +8,10 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    .controller('HoursLostController', function HoursLostController ($http, SocketEvents) {
+    .controller('HoursLostController', function HoursLostController (SocketHandler, SocketEvents) {
       var that = this;
+      var on = SocketHandler.addListener;
+      var emit = SocketHandler.emit;
       console.log('HoursLostController: initialized');
       /*
        * calculates social media posts, such as tweets and facebook posts into minutes,
@@ -47,41 +49,52 @@
           instagram: 7
         }
       };
-      this.activeAccounts = {
-        instagram: false,
-        twitter: true,
-        facebook: false,
-        gplus: false
+      this.accounts = {
+        instagram: { active: false },
+        twitter: { active: true },
+        facebook: { active: true },
+        gplus: { active: true}
       };
       /*
       * gets all social media data authed by the user
       * */
       this.getSocialMediaData = function () {
-        Object.keys(that.activeAccounts)
+        Object.keys(that.accounts)
           .filter(function (authedMedia) {
-            return that.activeAccounts[authedMedia] === true;
+            console.log(authedMedia);
+            return that.accounts[authedMedia].active === true;
           })
-          .forEach(function (mediaToGET) {
-            console.log(mediaToGET);
-            $http.get('/socialdata/' + mediaToGET)
-              .success(function(data, status, headers, config) {
-                console.log(data);
-                console.log(status);
-              })
-              .error(function(data, status, headers, config) {
-                console.log(data);
-                console.log(status);
-              });
+          .forEach(function (socialmedia) {
+            console.log(socialmedia);
+            emit('get:' + socialmedia, socialmedia);
           });
       };
+       //this.getSocialMediaData = function () {
+      //  Object.keys(that.accounts)
+      //    .filter(function (authedMedia) {
+      //      return that.accounts[authedMedia] === true;
+      //    })
+      //    .forEach(function (mediaToGET) {
+      //      console.log(mediaToGET);
+      //      $http.get('/socialdata/' + mediaToGET)
+      //        .success(function(data, status, headers, config) {
+      //          console.log(data);
+      //          console.log(status);
+      //        })
+      //        .error(function(data, status, headers, config) {
+      //          console.log(data);
+      //          console.log(status);
+      //        });
+      //    });
+      //};
       /*
       * returns true if any social media has authed
       * */
       this.userHasAuthed = function () {
-        if (this.activeAccounts.instagram === true ||
-            this.activeAccounts.facebook === true ||
-            this.activeAccounts.gplus === true ||
-            this.activeAccounts.twitter === true ) {
+        if (this.accounts.instagram === true ||
+            this.accounts.facebook === true ||
+            this.accounts.gplus === true ||
+            this.accounts.twitter === true ) {
           return true;
         }
         else {

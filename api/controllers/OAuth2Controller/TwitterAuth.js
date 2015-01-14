@@ -19,7 +19,7 @@ var addTwitterCredentialsToUser = function (profile, token, existingUser) {
  * @param Socket.io connection io: the socket.io connection to use
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (socket, session, passport, callback) {
+module.exports = function (socket, session, passport) {
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
@@ -49,7 +49,6 @@ module.exports = function (socket, session, passport, callback) {
                 if (err) {
                   throw err;
                 }
-                socket.emit('twitter:connected', user);
                 console.log(chalk.green('TwitterAuth: existing user extended with twitter credentials', user));
                 return done(null, user);
               });

@@ -19,7 +19,7 @@ var addGoogleCredentialsToUser = function (profile, token, existingUser) {
  * @param Socket.io connection io: the socket.io connection to use
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (socket, session, passport, callback) {
+module.exports = function (socket, session, passport) {
   socket.emit('google:connected', true);
   passport.use(new GoogleStrategy({
       clientID: authCredentials.google.clientId,

@@ -11,7 +11,6 @@ var sessionStore = new session.MemoryStore;
 var OAuth2Controller = require('./OAuth2Controller/OAuth2Controller.js');
 var RequestController = require('./APIRequestController/APIRequestController.js');
 var User = require('../models/User.js');
-var authCredentials = require('../../config/auth/index');
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * *
  * main controller                                 *
@@ -37,42 +36,7 @@ module.exports = function (app, io) {
   app.get('/connected', function (req, res) {
     res.render('spa');
   });
-  ////* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  //// * routes for OAuths                                        *
-  //// * @callback follows the pattern '/<socialmedia>/callback'  *
-  //// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-  //// twitter
-  //app.get('/auth/twitter', passport.authenticate('twitter'));
-  //app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-  //    failureRedirect: '/'
-  //  }),
-  //  function (req, res) {
-  //    res.redirect('/connected');
-  //  });
-  //// instagram
-  //app.get('/auth/instagram', passport.authenticate('instagram', {scope: 'basic'}));
-  //app.get('/auth/instagram/callback', passport.authenticate('instagram', {
-  //    failureRedirect: '/'
-  //  }),
-  //  function (req, res) {
-  //    res.redirect('/connected');
-  //  });
-  //// facebook
-  //app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
-  //app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  //    failureRedirect: '/'
-  //  }),
-  //  function (req, res) {
-  //    res.redirect('/connected');
-  //  });
-  //// google
-  //app.get('/auth/google', passport.authenticate('google', {scope: ['email', 'profile']}));
-  //app.get('/auth/google/callback', passport.authenticate('google', {
-  //    failureRedirect: '/'
-  //  }),
-  //  function (req, res) {
-  //    res.redirect('/connected');
-  //  });
+
   /* * * * * * * * * * * * * * * * * * * *
    * all socket.io events happens here   *
    * * * * * * * * * * * * * * * * * * * */
@@ -90,8 +54,9 @@ module.exports = function (app, io) {
             OAuth2Controller(app, socket, session, passport);
           }
           else {
-            console.log('no session found');
+            console.log('session found');
             console.log(session);
+            that.session = session;
             OAuth2Controller(app, socket, session, passport);
           }
         });
@@ -109,6 +74,18 @@ module.exports = function (app, io) {
       if (that.user || that.session) {
         socket.emit('all:user', { thatuser: that.user, thatsession: that.session });
       }
+    });
+    socket.on('get:twitter', function (data) {
+      console.log(data);
+    });
+    socket.on('get:gplus', function (data) {
+      console.log(data);
+    });
+    socket.on('get:facebook', function (data) {
+      console.log(data);
+    });
+    socket.on('get:instagram', function (data) {
+      console.log(data);
     });
   });
 };

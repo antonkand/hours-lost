@@ -1,5 +1,4 @@
-;
-(function () {
+;(function () {
   'use strict';
   angular.module('HoursLostApp')
     .factory('SocketEvents', function (SocketHandler) {
