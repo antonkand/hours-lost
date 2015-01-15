@@ -1,4 +1,4 @@
-(function () {
+;(function () {
   /* global swal */
   'use strict';
   angular
@@ -8,11 +8,12 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    .controller('HoursLostController', function HoursLostController (SocketHandler, SocketEvents) {
+    .controller('HoursLostController', function HoursLostController (SocketHandler, SocketEvents, OfflineHandler) {
       var that = this;
       var on = SocketHandler.addListener;
       var emit = SocketHandler.emit;
       console.log('HoursLostController: initialized');
+      console.log(this.status);
       /*
        * calculates social media posts, such as tweets and facebook posts into minutes,
        * by using passed in estimate object

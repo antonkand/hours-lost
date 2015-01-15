@@ -1,4 +1,4 @@
-(function () {
+;(function () {
   /* global swal */
   'use strict';
   angular
@@ -8,11 +8,12 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    .controller('HoursLostController', ["SocketHandler", "SocketEvents", function HoursLostController (SocketHandler, SocketEvents) {
+    .controller('HoursLostController', ["SocketHandler", "SocketEvents", "OfflineHandler", function HoursLostController (SocketHandler, SocketEvents, OfflineHandler) {
       var that = this;
       var on = SocketHandler.addListener;
       var emit = SocketHandler.emit;
       console.log('HoursLostController: initialized');
+      console.log(this.status);
       /*
        * calculates social media posts, such as tweets and facebook posts into minutes,
        * by using passed in estimate object
@@ -209,6 +210,36 @@
       // only injection is needed
       // so: only log that they've been injected
       return {log: console.log('SocketEvents: injected')};
+    }]);
+})();
+;(function (){
+  'use strict';
+  angular.module('HoursLostApp')
+    .factory('OfflineHandler', ["SocketHandler", function (SocketHandler) {
+      var offlineHandler = {};
+      offlineHandler.status = {
+        disconnected: true,
+        connected: false,
+        reconnected: false,
+        toggle: function () {
+          offlineHandler.status.disconnected = !offlineHandler.status.disconnected;
+          offlineHandler.status.connected = !offlineHandler.status.connected;
+          console.log('OfflineHandler.toggle: connected', offlineHandler.status.connected);
+          console.log('OfflineHandler.toggle: disconnected', offlineHandler.status.disconnected);
+        }
+      };
+      var on = SocketHandler.addListener;
+      on('disconnect', function () {
+        offlineHandler.status.toggle();
+      });
+      on('connect', function () {
+        offlineHandler.status.toggle();
+      });
+      on('reconnect', function () {
+        offlineHandler.status.reconnected = true;
+        console.log('offlineHandler.reconnected', offlineHandler.status.reconnected);
+      });
+      return offlineHandler;
     }]);
 })();
 ;(function () {
