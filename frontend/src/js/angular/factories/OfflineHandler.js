@@ -1,18 +1,24 @@
 ;(function (){
   'use strict';
   angular.module('HoursLostApp')
-    .factory('OfflineHandler', function (SocketHandler) {
+    .factory('OfflineHandler', function (SocketHandler, $rootScope) {
       var offlineHandler = {};
+      var on = SocketHandler.addListener;
+      var emit = SocketHandler.emit;
       /* @description: statuses to check for when detecting connection */
       offlineHandler.status = {
         offline: true,
         online: false,
         reconnected: false,
+        firstConnect: true,
         toggle: function () {
           offlineHandler.status.offline = !offlineHandler.status.offline;
           offlineHandler.status.online = !offlineHandler.status.online;
           console.log('OfflineHandler.online', offlineHandler.status.online);
           console.log('OfflineHandler.offline', offlineHandler.status.offline);
+          if (offlineHandler.status.online) {
+            $rootScope.$emit('status:online');
+          }
         }
       };
       /*
@@ -56,11 +62,11 @@
       * @description: Socket.io events for checking connection status
       * changes state from online and offline and detects reconnection to Socket.io
       * */
-      var on = SocketHandler.addListener;
       on('disconnect', function () {
         offlineHandler.status.toggle();
       });
       on('connect', function () {
+        offlineHandler.status.firstConnect = false;
         offlineHandler.status.toggle();
       });
       on('reconnect', function () {

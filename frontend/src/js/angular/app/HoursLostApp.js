@@ -1,4 +1,5 @@
-;(function () {
+;
+(function () {
   /* global swal */
   'use strict';
   angular
@@ -8,51 +9,68 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    .controller('HoursLostController', function HoursLostController (SocketHandler, SocketEvents, OfflineHandler) {
+    .controller('HoursLostController', function HoursLostController ($rootScope, SocketHandler, SocketEvents, OfflineHandler, SocialMediaCalculator) {
+      this.data = null;
+      this.user = null;
+      this.shareMessage = null;
       var that = this;
+      var localId = 'hoursLost'; // used as localStorage id
+      var calc = SocialMediaCalculator.calc;
       var on = SocketHandler.addListener;
       var emit = SocketHandler.emit;
       var offlineHandler = OfflineHandler;
-      var online = offlineHandler.status.online;
-      var offline = offlineHandler.status.offline;
-      var reconnected = offlineHandler.status.reconnected;
-      console.log('HoursLostController: initialized');
+      var getDataFromServer = function () {
+        return {
+          total: {
+            minutes: 0
+          },
+          socialMediaPosts: {
+            tweets: 100,
+            facebookPosts: 50,
+            gplusPosts: 50,
+            instagrams: 70
+          },
+          estimates: {
+            tweet: 1,
+            facebookPost: 5,
+            gplusPost: 5,
+            instagram: 7
+          }
+        };
+      };
       /*
-       * calculates social media posts, such as tweets and facebook posts into minutes,
-       * by using passed in estimate object
-       * @param Object data: contains the data to calculate.
-       * data obj should look like: { tweet: Number, facebookPost: Number, gplusPost: Number, instagram: Number }
-       * @param Object minutes: minutes to calculate as estimate for each post
-       * minutes obj should look like: { tweet: Number, facebookPost: Number, gplusPost: Number, instagram: Number }
+      * @description:
+      * calculates total number of minutes spent depending on number of posts etc
+      */
+      var setTotalMinutes = function (data, minutes) {
+        this.data.total.minutes = (data > 0 && minutes > 0) ? calc(data, minutes) : 0;
+      }.bind(this);
+      /*
+       * @description: this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
+       * each estimate can be overridden by the user
        * */
-      var calculateMinutes = function (data, minutes) {
-        return (data.tweets ? data.tweets * minutes.tweet : 0) +
-               (data.facebookPosts ? data.facebookPosts * minutes.facebookPost : 0) +
-               (data.gplusPosts ? data.gplusPosts * minutes.gplusPost : 0) +
-               (data.instagrams ? data.instagrams * minutes.instagram : 0);
-      };
-
-      /*
-      * this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
-      * each estimate can be overridden by the user
-      * */
-      this.data = {
-        total: {
-          minutes: 0
-        },
-        socialMediaPosts: {
-          tweets: 100,
-          facebookPosts: 50,
-          gplusPosts: 50,
-          instagrams: 70
-        },
-        estimates: {
-          tweet: 1,
-          facebookPost: 5,
-          gplusPost: 5,
-          instagram: 7
+      var detectDataSet = function (callback) {
+        console.log('detectDataSet: online status ', offlineHandler.status.online);
+        if (offlineHandler.status.online) {
+          this.data = getDataFromServer();
+          offlineHandler.set(localId, this.data);
+          this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
+          callback(this.data.socialMediaPosts, this.data.estimates);
         }
-      };
+        if (offlineHandler.status.reconnected) {
+          return;
+        }
+        if (offlineHandler.status.offline) {
+          this.data = offlineHandler.status.firstConnect ? getDataFromServer() : offlineHandler.get(localId);
+          callback(this.data.socialMediaPosts, this.data.estimates);
+        }
+      }.bind(this);
+      // when connection state changes, detect which data set to use
+      $rootScope.$on('status:online', function () {
+        console.log('$rootScope: status:online changed');
+        detectDataSet(setTotalMinutes);
+      });
+      console.log('HoursLostController: initialized');
       this.user = {
         id: null,
         accounts: [
@@ -79,42 +97,19 @@
         ]
       };
       /*
-      * gets all social media data authed by the user
-      * */
+       * gets all social media data authed by the user
+       * */
       this.getSocialMediaData = function () {
-       that.user.accounts
+        that.user.accounts
           .filter(function (site) {
-            console.log(site.name);
-             return that.user.accounts[site.name] !== null;
+            return site.name !== null;
           })
           .forEach(function (socialmedia) {
             console.log('socialmedia');
-            console.log(socialmedia.media);
+            console.log(socialmedia);
             emit('get:' + socialmedia.media, socialmedia);
           });
       };
-      /*
-      * returns true if any social media has authed
-      * */
-      this.userHasAuthed = function () {
-        if (this.user.instagram === true ||
-            this.user.facebook === true ||
-            this.user.gplus === true ||
-            this.user.twitter === true ) {
-          return true;
-        }
-        else {
-          return false;
-        }
-      }.bind(this);
-      /*
-      * all directives use this var as passed in data
-      * */
-      this.data.total.minutes = calculateMinutes(this.data.socialMediaPosts, this.data.estimates);
-      /*
-      * the message to share with your friends, either singular or plural depending on time spent
-      * */
-      this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
     });
 })();
 
