@@ -77,22 +77,26 @@ module.exports = function (app, io) {
           return {
             name: that.session.passport.user.socialmediaData[socialmedia].name,
             media: socialmedia,
-            user: that.session.passport.user._id
+            id: that.session.passport.user._id
           };
         });
         socket.emit('all:user', user);
       }
     });
     socket.on('get:twitter', function (data) {
+      console.log('get:twitter');
       console.log(data);
     });
-    socket.on('get:gplus', function (data) {
+    socket.on('get:google', function (data) {
+      console.log('get:google');
       console.log(data);
     });
     socket.on('get:facebook', function (data) {
+      console.log('get:facebook');
       console.log(data);
     });
     socket.on('get:instagram', function (data) {
+      console.log('get:instagram');
       console.log(data);
     });
   });

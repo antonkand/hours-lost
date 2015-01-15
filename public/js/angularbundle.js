@@ -10,8 +10,8 @@
       'SharingModule'
     ])
     .controller('HoursLostController', ["$rootScope", "SocketHandler", "SocketEvents", "OfflineHandler", "SocialMediaCalculator", function HoursLostController ($rootScope, SocketHandler, SocketEvents, OfflineHandler, SocialMediaCalculator) {
-      this.data = null;
-      this.user = null;
+      this.data = {};
+      this.user = {};
       this.shareMessage = null;
       var that = this;
       var localId = 'hoursLost'; // used as localStorage id
@@ -71,42 +71,23 @@
         detectDataSet(setTotalMinutes);
       });
       console.log('HoursLostController: initialized');
-      this.user = {
-        id: null,
-        accounts: [
-          {
-            media: 'instagram',
-            name: null,
-            id: 123
-          },
-          {
-            media: 'facebook',
-            name: null,
-            id: 123
-          },
-          {
-            media: 'twitter',
-            name: null,
-            id: 123
-          },
-          {
-            media: 'gplus',
-            name: 'johan',
-            id: 123
-          }
-        ]
-      };
+      // on connect, server emits all:user,
+      // fetch those user accounts, overwrite this.user.accounts
+      on('all:user', function (data) {
+        console.log('all:user');
+        if (data) {
+          that.user.accounts = data.user;
+          console.log('user updated with server data: ', that.user);
+        }
+      });
       /*
        * gets all social media data authed by the user
        * */
       this.getSocialMediaData = function () {
-        that.user.accounts
-          .filter(function (site) {
+        that.user.accounts.filter(function (site) {
             return site.name !== null;
           })
           .forEach(function (socialmedia) {
-            console.log('socialmedia');
-            console.log(socialmedia);
             emit('get:' + socialmedia.media, socialmedia);
           });
       };
@@ -174,7 +155,6 @@
         emit('socket:connection', ('hours-lost:\n client socket ' + SocketHandler.socket.ids + '\n in namespace ' + SocketHandler.socket.nsp + ' connected.'));
       };
       on('socket:connection', function (data) {
-        console.log(data);
         sendSession();
         retrieveUser();
         logConnectionToServer();
@@ -197,12 +177,6 @@
       on('twitter:req', function (data) {
         console.log('twitter:req.');
         console.log(data);
-      });
-      on('all:user', function (data) {
-        console.log('all:user');
-        if (data) {
-          console.log(data);
-        }
       });
       // we won't be exposing the events to controllers,
       // only injection is needed
