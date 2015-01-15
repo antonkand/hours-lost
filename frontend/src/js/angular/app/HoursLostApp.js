@@ -12,8 +12,11 @@
       var that = this;
       var on = SocketHandler.addListener;
       var emit = SocketHandler.emit;
+      var offlineHandler = OfflineHandler;
+      var online = offlineHandler.status.online;
+      var offline = offlineHandler.status.offline;
+      var reconnected = offlineHandler.status.reconnected;
       console.log('HoursLostController: initialized');
-      console.log(this.status);
       /*
        * calculates social media posts, such as tweets and facebook posts into minutes,
        * by using passed in estimate object
