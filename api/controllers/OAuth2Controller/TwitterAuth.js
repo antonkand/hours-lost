@@ -40,7 +40,7 @@ module.exports = function (app, socket, session, passport) {
             }
             // if user is found in db and have twitter credentials, use that
             if (user && user.socialmediaData.twitter.id) {
-              app.emit('get:userdata', ['twitter', user]);
+              app.emit('get:userdata', { site: 'twitter', user: user });
               return done(null, user);
             }
             else {
@@ -51,7 +51,7 @@ module.exports = function (app, socket, session, passport) {
                   throw err;
                 }
                 console.log(chalk.cyan('TwitterAuth: existing user extended with twitter credentials'));
-                app.emit('get:userdata', ['twitter', user]);
+                app.emit('get:userdata', { site: 'twitter', user: user });
                 return done(null, user);
               });
             }
@@ -68,7 +68,7 @@ module.exports = function (app, socket, session, passport) {
             }
             // if the user is found, auth
             if (user) {
-              app.emit('get:userdata', ['twitter', user]);
+              app.emit('get:userdata', { site: 'twitter', user: user });
               return done(null, user);
             }
             else {
@@ -80,7 +80,7 @@ module.exports = function (app, socket, session, passport) {
                   throw err;
                 }
                 console.log(chalk.cyan('TwitterAuth: new user created'));
-                app.emit('get:userdata', ['twitter', user]);
+                app.emit('get:userdata', { site: 'twitter', user: user });
                 return done(null, user);
               });
             }
