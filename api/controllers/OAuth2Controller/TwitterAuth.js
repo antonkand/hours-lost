@@ -16,10 +16,12 @@ var addTwitterCredentialsToUser = function (profile, token, existingUser) {
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
  * if user is found in session, that session's account is connected to twitter oauth
+ * @param Express-app app: app to emit data
  * @param Socket.io connection io: the socket.io connection to use
+ * @param Passport.MemoryStore.session session: session to use for checking existing user
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (socket, session, passport) {
+module.exports = function (app, socket, session, passport) {
   passport.use(new TwitterStrategy({
       consumerKey: authCredentials.twitter.consumer_key,
       consumerSecret: authCredentials.twitter.consumer_secret,
@@ -31,7 +33,6 @@ module.exports = function (socket, session, passport) {
         // or use the credentials from that db object if twitter credentials are already stored
         if (session.passport.user) {
           console.log('user found in session');
-          console.log(session.passport.user);
           User.findOne({'_id': session.passport.user._id}, function (err, user) {
             // if err, throw it
             if (err) {
@@ -39,7 +40,7 @@ module.exports = function (socket, session, passport) {
             }
             // if user is found in db and have twitter credentials, use that
             if (user && user.socialmediaData.twitter.id) {
-              socket.emit('twitter:connected', user);
+              app.emit('get:userdata', ['twitter', user]);
               return done(null, user);
             }
             else {
@@ -49,7 +50,8 @@ module.exports = function (socket, session, passport) {
                 if (err) {
                   throw err;
                 }
-                console.log(chalk.green('TwitterAuth: existing user extended with twitter credentials', user));
+                console.log(chalk.cyan('TwitterAuth: existing user extended with twitter credentials'));
+                app.emit('get:userdata', ['twitter', user]);
                 return done(null, user);
               });
             }
@@ -66,7 +68,7 @@ module.exports = function (socket, session, passport) {
             }
             // if the user is found, auth
             if (user) {
-              socket.emit('twitter:connected', user);
+              app.emit('get:userdata', ['twitter', user]);
               return done(null, user);
             }
             else {
@@ -77,8 +79,8 @@ module.exports = function (socket, session, passport) {
                 if (err) {
                   throw err;
                 }
-                console.log(chalk.green('TwitterAuth: new user created', user));
-                socket.emit('twitter:connected', user);
+                console.log(chalk.cyan('TwitterAuth: new user created'));
+                app.emit('get:userdata', ['twitter', user]);
                 return done(null, user);
               });
             }

@@ -60,7 +60,7 @@ module.exports = function (app, io) {
           }
         });
     });
-    //RequestController(socket, session); // handles all GETs to external API
+    RequestController(app, socket); // handles all GETs to external API
     // socket connected, celebrate!
     socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
     // log the connected socket
