@@ -18,6 +18,10 @@ module.exports = function (app, socket) {
       console.log(
         chalk.green('get:userdata ') + chalk.white('user authed against twitter:\n' + data.user.socialmediaData.twitter));
     }
+    if (data.site === 'instagram') {
+      console.log(
+        chalk.green('get:userdata ') + chalk.white('user authed against instagram:\n' + data.user.socialmediaData.instagram));
+    }
   });
   //app.get('/socialdata/twitter', function (req, res) {
   //  TwitterRequestService(req, res);

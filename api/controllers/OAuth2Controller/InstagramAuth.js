@@ -16,11 +16,12 @@ var addCredentialsToInstagramUser = function (profile, token, existingUser) {
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
  * if user is found in session, that session's account is connected to instagram oauth
+ * @param Express-app app: app to emit data
  * @param Socket.io connection io: the socket.io connection to use
+ * @param Passport.MemoryStore.session session: session to use for checking existing user
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (socket, session, passport) {
-  socket.emit('instagram:connected', true);
+module.exports = function (app, socket, session, passport) {
   passport.use(new InstagramStrategy({
       clientID: authCredentials.instagram.clientId,
       clientSecret: authCredentials.instagram.clientSecret,
@@ -32,7 +33,6 @@ module.exports = function (socket, session, passport) {
         // or use the credentials from that db object if google credentials are already stored
         if (session.passport.user) {
           console.log('user found in session');
-          console.log(session.passport.user);
           User.findOne({'_id': session.passport.user._id}, function (err, user) {
             // if err, throw it
             if (err) {
@@ -40,6 +40,7 @@ module.exports = function (socket, session, passport) {
             }
             // if user is found in db and have instagram credentials, use that
             if (user && user.socialmediaData.instagram.id) {
+              app.emit('get:userdata', { site: 'instagram', user: user });
               return done(null, user);
             }
             else {
@@ -49,7 +50,8 @@ module.exports = function (socket, session, passport) {
                 if (err) {
                   throw err;
                 }
-                console.log(chalk.green('InstagramAuth: existing user extended with instagram credentials', user));
+                console.log(chalk.green('InstagramAuth: existing user extended with instagram credentials'));
+                app.emit('get:userdata', { site: 'instagram', user: user });
                 return done(null, user);
               });
             }
@@ -66,6 +68,7 @@ module.exports = function (socket, session, passport) {
             }
             // if the user is found, auth
             if (user) {
+              app.emit('get:userdata', { site: 'instagram', user: user });
               return done(null, user);
             }
             else {
@@ -76,7 +79,8 @@ module.exports = function (socket, session, passport) {
                 if (err) {
                   throw err;
                 }
-                console.log(chalk.green('InstagramAuth: new user created', user));
+                console.log(chalk.green('InstagramAuth: new user created'));
+                app.emit('get:userdata', { site: 'instagram', user: user });
                 return done(null, user);
               });
             }

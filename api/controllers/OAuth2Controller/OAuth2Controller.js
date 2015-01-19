@@ -51,5 +51,5 @@ module.exports = function (app, socket, session, passport) {
   require('./TwitterAuth.js')(app, socket, session, passport);
   require('./FacebookAuth.js')(socket, session, passport);
   require('./GooglePlusAuth.js')(socket, session, passport);
-  require('./InstagramAuth.js')(socket, session, passport);
+  require('./InstagramAuth.js')(app, socket, session, passport);
 };
