@@ -16,11 +16,12 @@ var addFacebookCredentialsToUser = function (profile, token, existingUser) {
  * if no authed user is found in session or db, a new user is created
  * if user is found in db, that account is used
  * if user is found in session, that session's account is connected to facebook oauth
+ * @param Express-app app: app to emit data
  * @param Socket.io connection io: the socket.io connection to use
+ * @param Passport.MemoryStore.session session: session to use for checking existing user
  * @param Passport passport: the configured passport object to use
  * */
-module.exports = function (socket, session, passport) {
-  socket.emit('facebook:connected', true);
+module.exports = function (app, socket, session, passport) {
   passport.use(new FacebookStrategy({
       clientID: authCredentials.facebook.clientId,
       clientSecret: authCredentials.facebook.clientSecret,
@@ -39,6 +40,7 @@ module.exports = function (socket, session, passport) {
             }
             // if user is found in db and have facebook credentials, use that
             if (user && user.socialmediaData.facebook.id) {
+              app.emit('get:userdata', { site: 'facebook', user: user });
               return done(null, user);
             }
             else {
@@ -48,7 +50,8 @@ module.exports = function (socket, session, passport) {
                 if (err) {
                   throw err;
                 }
-                console.log(chalk.green('FacebookAuth: existing user extended with facebook credentials', user));
+                console.log(chalk.green('FacebookAuth: existing user extended with facebook credentials'));
+                app.emit('get:userdata', { site: 'facebook', user: user });
                 return done(null, user);
               });
             }
@@ -65,6 +68,7 @@ module.exports = function (socket, session, passport) {
             }
             // if the user is found, auth
             if (user) {
+              app.emit('get:userdata', { site: 'facebook', user: user });
               return done(null, user);
             }
             else {
@@ -75,7 +79,8 @@ module.exports = function (socket, session, passport) {
                 if (err) {
                   throw err;
                 }
-                console.log(chalk.green('FacebookAuth: new user created', user));
+                console.log(chalk.green('FacebookAuth: new user created'));
+                app.emit('get:userdata', { site: 'facebook', user: user });
                 return done(null, user);
               });
             }

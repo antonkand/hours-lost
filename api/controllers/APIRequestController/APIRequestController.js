@@ -22,6 +22,10 @@ module.exports = function (app, socket) {
       console.log(
         chalk.green('get:userdata ') + chalk.white('user authed against instagram:\n' + data.user.socialmediaData.instagram));
     }
+    if (data.site === 'facebook') {
+      console.log(
+        chalk.green('get:userdata ') + chalk.white('user authed against facebook:\n' + data.user.socialmediaData.facebook));
+    }
   });
   //app.get('/socialdata/twitter', function (req, res) {
   //  TwitterRequestService(req, res);
