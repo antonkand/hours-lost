@@ -7,7 +7,7 @@
 </head>
 <body ng-controller="HoursLostController as hourslost" ng-cloak>
     <%- include partials/landingpage_leadcopy.ejs %>
-    <oauth-buttons></oauth-buttons>
+    <oauth-buttons values="hourslost.usernames"></oauth-buttons>
     <calculated-result totals="hourslost.data.total"></calculated-result>
     <customization-sliders estimates="hourslost.data.estimates"></customization-sliders>
     <final-result minutes="hourslost.data.minutes"></final-result>

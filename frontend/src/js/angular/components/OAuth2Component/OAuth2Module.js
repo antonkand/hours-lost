@@ -4,6 +4,9 @@
     .module('OAuth2Module', [])
     .directive('oauthButtons', function () {
       return {
+        scope: {
+          values: '='
+        },
         restrict: 'E',
         replace: false,
         templateUrl: 'js/angulartemplates/components/OAuth2Component/oauth2_template.html',

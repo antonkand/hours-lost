@@ -15,7 +15,7 @@
       };
     })
     .controller('CustomizationSliderController', CustomizationSliderController);
-  function CustomizationSliderController ($scope) {
+  function CustomizationSliderController (scope) {
     console.log('CustomizationSliderController: initialized');
   }
 })();

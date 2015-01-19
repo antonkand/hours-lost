@@ -1,5 +1,4 @@
-;
-(function () {
+;(function () {
   /* global swal */
   'use strict';
   angular
@@ -13,6 +12,7 @@
       this.data = {};
       this.user = {};
       this.shareMessage = null;
+      this.usernames = {instagram: null, facebook: null, twitter: null, google: null};
       var that = this;
       var localId = 'hoursLost'; // used as localStorage id
       var calc = SocialMediaCalculator.calc;
@@ -39,9 +39,9 @@
         };
       };
       /*
-      * @description:
-      * calculates total number of minutes spent depending on number of posts etc
-      */
+       * @description:
+       * calculates total number of minutes spent depending on number of posts etc
+       */
       var setTotalMinutes = function (data, minutes) {
         this.data.total.minutes = (data > 0 && minutes > 0) ? calc(data, minutes) : 0;
       }.bind(this);
@@ -50,7 +50,6 @@
        * each estimate can be overridden by the user
        * */
       var detectDataSet = function (callback) {
-        console.log('detectDataSet: online status ', offlineHandler.status.online);
         if (offlineHandler.status.online) {
           this.data = getDataFromServer();
           offlineHandler.set(localId, this.data);
@@ -67,17 +66,23 @@
       }.bind(this);
       // when connection state changes, detect which data set to use
       $rootScope.$on('status:online', function () {
-        console.log('$rootScope: status:online changed');
         detectDataSet(setTotalMinutes);
       });
       console.log('HoursLostController: initialized');
       // on connect, server emits all:user,
       // fetch those user accounts, overwrite this.user.accounts
+      // store usernames in this.usernames for reference on oauth buttons
       on('all:user', function (data) {
-        console.log('all:user');
         if (data) {
           that.user.accounts = data.user;
-          console.log('user updated with server data: ', that.user);
+          $rootScope.$apply(function () {
+            that.user.accounts.forEach(function (active) {
+              that.usernames[active.media] = active.name;
+            });
+          });
+          console.log('all:user that.usernames');
+          console.log(that.usernames);
+          console.log('user updated with server data: ', that.user.accounts);
         }
       });
       /*
@@ -85,8 +90,8 @@
        * */
       this.getSocialMediaData = function () {
         that.user.accounts.filter(function (site) {
-            return site.name !== null;
-          })
+          return site.name !== null;
+        })
           .forEach(function (socialmedia) {
             emit('get:' + socialmedia.media, socialmedia);
           });
