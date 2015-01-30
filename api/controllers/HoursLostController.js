@@ -45,22 +45,24 @@ module.exports = function (app, io) {
     this.session = null;
     this.sid = null;
     var that = this;
+    // use the session received from client
+    // pass it into controller for oauth
     socket.on('all:session', function (cookie) {
       that.sid = cookie.substring(16, 48); // substring of sid
       console.log('all:session');
       sessionStore.get(that.sid, function (err, session) {
           if (err || !session) {
             console.log('no session found');
-            OAuth2Controller(app, socket, session, passport);
+            OAuth2Controller(app, socket, session, passport); // handles all auths
           }
           else {
             console.log('session found');
             that.session = session;
-            OAuth2Controller(app, socket, session, passport);
+            OAuth2Controller(app, socket, session, passport); // handles all auths
           }
         });
     });
-    RequestController(app, socket); // handles all GETs to external API
+    RequestController(app); // handles all GETs to external API
     // socket connected, celebrate!
     socket.emit('socket:connection', 'hours-lost-server: socket successfully connected.');
     // log the connected socket
@@ -83,21 +85,22 @@ module.exports = function (app, io) {
         socket.emit('all:user', user);
       }
     });
-    socket.on('get:twitter', function (data) {
-      console.log('get:twitter');
-      console.log(data);
+    app.on('get:twitter', function (tweets) {
+      if (tweets) {
+        socket.emit('get:twitter', tweets);
+      }
     });
-    socket.on('get:google', function (data) {
-      console.log('get:google');
-      console.log(data);
+    app.on('get:facebook', function (posts) {
+      console.log('on get:facebook', posts);
+      if (posts) {
+        socket.emit('get:facebook', posts);
+      }
     });
-    socket.on('get:facebook', function (data) {
-      console.log('get:facebook');
-      console.log(data);
-    });
-    socket.on('get:instagram', function (data) {
-      console.log('get:instagram');
-      console.log(data);
+    app.on('get:instagram', function (instagrams) {
+      console.log('on get:instagram', instagrams);
+      if (instagrams) {
+        socket.emit('get:instagram', instagrams);
+      }
     });
   });
 };

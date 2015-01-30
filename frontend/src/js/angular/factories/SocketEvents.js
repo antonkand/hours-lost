@@ -33,12 +33,8 @@
       on('google:connected', function (data) {
         console.log('google:connected ' + data);
       });
-      on('twitter:user', function (data) {
-        console.log('twitter:user received: ' + data);
-      });
-      on('twitter:req', function (data) {
-        console.log('twitter:req.');
-        console.log(data);
+      on('twitter:data', function (data) {
+        console.log('twitter:data received: ' + data);
       });
       // we won't be exposing the events to controllers,
       // only injection is needed

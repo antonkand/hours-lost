@@ -85,6 +85,11 @@
           console.log('user updated with server data: ', that.user.accounts);
         }
       });
+      on('get:twitter', function (data) {
+        console.log('get:twitter');
+        that.data.tweets = data;
+        console.log(that.data);
+      });
       /*
        * gets all social media data authed by the user
        * */

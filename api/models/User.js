@@ -26,11 +26,11 @@ var User = new mongoose.Schema({
       token: String,
       username: String,
       name: String
-    },
-    tweets: Number,
-    facebookPosts: Number,
-    instagrams: Number,
-    gplusPosts: Number
-  }
+    }
+  },
+  tweets: Number,
+  facebookPosts: Object,
+  instagrams: Object,
+  gplusPosts: Number
 });
 module.exports = mongoose.model('User', User);
