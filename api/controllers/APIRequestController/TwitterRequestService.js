@@ -2,6 +2,7 @@
 var request = require('request');
 var auth = require('../../../config/auth');
 var crypto = require('crypto');
+var q = require('q');
 
 var hashSignature = function (signature, signingKey, callback) {
   var algorithm = 'sha1';
