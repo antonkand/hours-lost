@@ -18,25 +18,29 @@ module.exports = function (app) {
     if (data.site === 'twitter') {
       console.log(chalk.green('get:userdata ') + chalk.white('user authed against twitter:\n' + data.user.socialmediaData.twitter));
       // pass in the user's credentials into the GET
-      getTwitterData(data.user.socialmediaData.twitter, function (fail, body) {
+      getTwitterData(data.user.socialmediaData.twitter, function (fail, tweets) {
         // response failed, log the body with error msg
         if (fail) {
-          console.error('getTwitterData: ', body);
+          console.error('getTwitterData: ', tweets);
           return;
         }
         // response success,
         // save tweets to db,
         // emit tweets to main controller
         else {
-          User.find({'socialmediaData.twitter.id': data.user.socialmediaData.twitter.id}, function (err, user) {
+          User.findOne({'socialmediaData.twitter.id': data.user.socialmediaData.twitter.id}, function (err, user) {
             // crashed db connection
             if (err) {
               throw err;
             }
             // emit the response body to main controller
             else {
-              app.emit('get:twitter', body);
-              console.log(chalk.green('found user after Facebook GET: ') + user);
+              //var json = { tweets: JSON.parse(tweets) };
+              var postedTweets = tweets[0].user.statuses_count;
+              user.tweets = postedTweets;
+              user.save();
+              app.emit('get:twitter', postedTweets);
+              console.log(chalk.green('found user after Twitter GET: ') + user);
             }
           });
         }
@@ -62,11 +66,11 @@ module.exports = function (app) {
             }
             // emit the response body to main controller
             else {
-              var json = { instagrams: JSON.parse(body).data.counts.media };
-              console.log(json);
-              user.instagrams = json;
+              var instagrams = JSON.parse(body).data.counts.media;
+              console.log(instagrams);
+              user.instagrams = instagrams;
               user.save();
-              app.emit('get:instagram', json);
+              app.emit('get:instagram', instagrams);
             }
           });
         }
