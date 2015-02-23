@@ -8,7 +8,7 @@
       'CustomizationSliderModule',
       'SharingModule'
     ])
-    .controller('HoursLostController', ["$rootScope", "SocketHandler", "SocketEvents", "OfflineHandler", "SocialMediaCalculator", function HoursLostController ($rootScope, SocketHandler, SocketEvents, OfflineHandler, SocialMediaCalculator) {
+    .controller('HoursLostController', ["$rootScope", "SocketHandler", "SocketEvents", "OfflineHandler", "SocialMediaCalculator", "$http", function HoursLostController ($rootScope, SocketHandler, SocketEvents, OfflineHandler, SocialMediaCalculator, $http) {
       this.data = {};
       this.user = {};
       this.shareMessage = null;
@@ -20,6 +20,8 @@
       var emit = SocketHandler.emit;
       var offlineHandler = OfflineHandler;
       var getDataFromServer = function () {
+        // TODO: $http.get this data
+        console.log(that.user);
         return {
           total: {
             minutes: 0
@@ -80,14 +82,18 @@
               that.usernames[active.media] = active.name;
             });
           });
-          console.log('all:user that.usernames');
-          console.log(that.usernames);
+          // TODO: pick an id from user.accounts, run detectDataSet(setTotalMinutes)
           console.log('user updated with server data: ', that.user.accounts);
         }
       });
       on('get:twitter', function (data) {
         console.log('get:twitter');
-        that.data.tweets = data;
+        that.data.socialMediaPosts.tweets = data;
+        console.log(that.data);
+      });
+      on('get:instagram', function (data) {
+        console.log('get:instagram');
+        that.data.socialMediaPosts.instagrams = data;
         console.log(that.data);
       });
       /*
