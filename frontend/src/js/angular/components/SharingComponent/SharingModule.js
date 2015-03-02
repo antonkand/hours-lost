@@ -15,8 +15,12 @@
         }
       };
     })
-    .controller('ShareFieldController', ShareFieldController);
-  function ShareFieldController () {
-    console.log('ShareFieldController: initialized');
-  }
+    .controller('SharingController', function ($rootScope) {
+      var controller = this;
+      controller.isVisible = false;
+      $rootScope.$on('user:connected', function () {
+        console.log('rootScope user:connected. SharingController showing.');
+        controller.isVisible = true;
+      });
+    });
 })();

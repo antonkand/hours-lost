@@ -5,7 +5,8 @@
     .directive('customizationSliders', function () {
       return {
         scope: {
-          estimates: '='
+          estimates: '=',
+          recalc: '='
         },
         restrict: 'E',
         replace: false,
@@ -14,8 +15,12 @@
         }
       };
     })
-    .controller('CustomizationSliderController', CustomizationSliderController);
-  function CustomizationSliderController (scope) {
-    console.log('CustomizationSliderController: initialized');
-  }
+    .controller('CustomizationSliderController', function ($rootScope) {
+      var controller = this;
+      controller.isVisible = false;
+      $rootScope.$on('user:connected', function () {
+        console.log('rootScope user:connected. CustomizationSliderController showing.');
+        controller.isVisible = true;
+      });
+    });
 })();

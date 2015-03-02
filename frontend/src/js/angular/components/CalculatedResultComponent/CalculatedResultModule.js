@@ -5,7 +5,7 @@
     .directive('calculatedResult', function () {
       return {
         scope: {
-          totals: '='
+          total: '='
         },
         restrict: 'E',
         replace: false,
@@ -15,33 +15,12 @@
         }
       };
     })
-    .controller('CalculatedResultController', CalculatedResultController(SweetAlert))
-    .factory('SweetAlert', SweetAlert);
-  function CalculatedResultController () {}
-  function SweetAlert () {
-    var alerts = {
-      error: function (title, text, confirmButtonText) {
-        if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({ title: title,
-            text: text,
-            type: 'error',
-            confirmButtonText: confirmButtonText });
-        }
-        else {
-          return false;
-        }
-      },
-      info: function (title, text, confirmButtonText) {
-        if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({ title: title,
-            text: text,
-            confirmButtonText: confirmButtonText });
-        }
-        else {
-          return false;
-        }
-      }
-    };
-    return alerts;
-  }
+    .controller('CalculatedResultController', function ($rootScope) {
+      var controller = this;
+      controller.isVisible = false;
+      $rootScope.$on('user:connected', function () {
+        console.log('rootScope user:connected. CalculatedResultController showing.');
+        controller.isVisible = true;
+      });
+    });
 })();

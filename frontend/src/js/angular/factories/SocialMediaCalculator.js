@@ -12,10 +12,12 @@
     .factory('SocialMediaCalculator', function () {
       return {
         calc: function (data, minutes) {
-          return (data.tweets ? data.tweets * minutes.tweet : 0) +
+          var sum = (data.tweets ? data.tweets * minutes.tweet : 0) +
                  (data.facebookPosts ? data.facebookPosts * minutes.facebookPost : 0) +
                  (data.gplusPosts ? data.gplusPosts * minutes.gplusPost : 0) +
                  (data.instagrams ? data.instagrams * minutes.instagram : 0);
+          console.log('SocialMediaCalculator, sum', sum);
+          return sum;
         }
       };
     });

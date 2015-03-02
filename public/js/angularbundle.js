@@ -9,11 +9,17 @@
       'SharingModule'
     ])
     .controller('HoursLostController', ["$rootScope", "SocketHandler", "SocketEvents", "OfflineHandler", "SocialMediaCalculator", "$http", function HoursLostController ($rootScope, SocketHandler, SocketEvents, OfflineHandler, SocialMediaCalculator, $http) {
+      $rootScope.$hasConnectedToSocialMedia = false;
       this.data = {};
       this.user = {};
       this.shareMessage = null;
-      this.usernames = {instagram: null, facebook: null, twitter: null, google: null};
-      var that = this;
+      this.usernames = {
+        instagram: null,
+        facebook: null,
+        twitter: null,
+        google: null
+      };
+      var controller = this;
       var localId = 'hoursLost'; // used as localStorage id
       var calc = SocialMediaCalculator.calc;
       var on = SocketHandler.addListener;
@@ -21,10 +27,10 @@
       var offlineHandler = OfflineHandler;
       var getDataFromServer = function () {
         // TODO: $http.get this data
-        console.log(that.user);
+        console.log(controller.data);
         return {
           total: {
-            minutes: 0
+            minutes: 333
           },
           socialMediaPosts: {
             tweets: 100,
@@ -45,27 +51,33 @@
        * calculates total number of minutes spent depending on number of posts etc
        */
       var setTotalMinutes = function (data, minutes) {
-        this.data.total.minutes = (data > 0 && minutes > 0) ? calc(data, minutes) : 0;
-      }.bind(this);
+        console.log('setTotalMinutes, data', data);
+        console.log('setTotalMinutes, minutes', minutes);
+        controller.data.total.minutes = (data && minutes) ? calc(data, minutes) : 0;
+      };
+      controller.recalc = function () {
+        console.log('recalculating');
+        setTotalMinutes(controller.data.socialMediaPosts, controller.data.estimates)
+      };
       /*
        * @description: this.data is used for storage of number of social media posts, total number of minutes spent and the default estimated time per social media post
        * each estimate can be overridden by the user
        * */
       var detectDataSet = function (callback) {
         if (offlineHandler.status.online) {
-          this.data = getDataFromServer();
-          offlineHandler.set(localId, this.data);
-          this.shareMessage = 'I\'ve lost about ' + (Math.ceil(this.data.total.minutes / 60 / 24) > 1 ? Math.ceil(this.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
-          callback(this.data.socialMediaPosts, this.data.estimates);
+          controller.data = getDataFromServer();
+          offlineHandler.set(localId, controller.data);
+          controller.shareMessage = 'I\'ve lost about ' + (Math.ceil(controller.data.total.minutes / 60 / 24) > 1 ? Math.ceil(controller.data.total.minutes / 60 / 24) + ' days ' : 'one day ') + 'of my life to social media. Check out https://hourslo.st to know how much you\'ve lost.';
+          callback(controller.data.socialMediaPosts, controller.data.estimates);
         }
         if (offlineHandler.status.reconnected) {
           return;
         }
         if (offlineHandler.status.offline) {
-          this.data = offlineHandler.status.firstConnect ? getDataFromServer() : offlineHandler.get(localId);
-          callback(this.data.socialMediaPosts, this.data.estimates);
+          controller.data = offlineHandler.status.firstConnect ? getDataFromServer() : offlineHandler.get(localId);
+          callback(controller.data.socialMediaPosts, controller.data.estimates);
         }
-      }.bind(this);
+      };
       // when connection state changes, detect which data set to use
       $rootScope.$on('status:online', function () {
         detectDataSet(setTotalMinutes);
@@ -76,31 +88,32 @@
       // store usernames in this.usernames for reference on oauth buttons
       on('all:user', function (data) {
         if (data) {
-          that.user.accounts = data.user;
+          $rootScope.$emit('user:connected', true);
+          controller.user.accounts = data.user;
           $rootScope.$apply(function () {
-            that.user.accounts.forEach(function (active) {
-              that.usernames[active.media] = active.name;
+            controller.user.accounts.forEach(function (active) {
+              controller.usernames[active.media] = active.name;
             });
           });
           // TODO: pick an id from user.accounts, run detectDataSet(setTotalMinutes)
-          console.log('user updated with server data: ', that.user.accounts);
+          console.log('user updated with server data: ', controller.user.accounts);
         }
       });
       on('get:twitter', function (data) {
         console.log('get:twitter');
-        that.data.socialMediaPosts.tweets = data;
-        console.log(that.data);
+        controller.data.socialMediaPosts.tweets = data;
+        console.log(controller.data);
       });
       on('get:instagram', function (data) {
         console.log('get:instagram');
-        that.data.socialMediaPosts.instagrams = data;
-        console.log(that.data);
+        controller.data.socialMediaPosts.instagrams = data;
+        console.log(controller.data);
       });
       /*
        * gets all social media data authed by the user
        * */
-      this.getSocialMediaData = function () {
-        that.user.accounts.filter(function (site) {
+      controller.getSocialMediaData = function () {
+        controller.user.accounts.filter(function (site) {
           return site.name !== null;
         })
           .forEach(function (socialmedia) {
@@ -288,10 +301,12 @@
     .factory('SocialMediaCalculator', function () {
       return {
         calc: function (data, minutes) {
-          return (data.tweets ? data.tweets * minutes.tweet : 0) +
+          var sum = (data.tweets ? data.tweets * minutes.tweet : 0) +
                  (data.facebookPosts ? data.facebookPosts * minutes.facebookPost : 0) +
                  (data.gplusPosts ? data.gplusPosts * minutes.gplusPost : 0) +
                  (data.instagrams ? data.instagrams * minutes.instagram : 0);
+          console.log('SocialMediaCalculator, sum', sum);
+          return sum;
         }
       };
     });
@@ -335,10 +350,14 @@
         }
       };
     })
-    .controller('ShareFieldController', ShareFieldController);
-  function ShareFieldController () {
-    console.log('ShareFieldController: initialized');
-  }
+    .controller('SharingController', ["$rootScope", function ($rootScope) {
+      var controller = this;
+      controller.isVisible = false;
+      $rootScope.$on('user:connected', function () {
+        console.log('rootScope user:connected. SharingController showing.');
+        controller.isVisible = true;
+      });
+    }]);
 })();
 (function () {
   'use strict';
@@ -347,7 +366,7 @@
     .directive('calculatedResult', function () {
       return {
         scope: {
-          totals: '='
+          total: '='
         },
         restrict: 'E',
         replace: false,
@@ -357,35 +376,14 @@
         }
       };
     })
-    .controller('CalculatedResultController', CalculatedResultController(SweetAlert))
-    .factory('SweetAlert', SweetAlert);
-  function CalculatedResultController () {}
-  function SweetAlert () {
-    var alerts = {
-      error: function (title, text, confirmButtonText) {
-        if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({ title: title,
-            text: text,
-            type: 'error',
-            confirmButtonText: confirmButtonText });
-        }
-        else {
-          return false;
-        }
-      },
-      info: function (title, text, confirmButtonText) {
-        if (angular.isString(title) && angular.isString(text) && angular.isString(confirmButtonText)) {
-          return swal({ title: title,
-            text: text,
-            confirmButtonText: confirmButtonText });
-        }
-        else {
-          return false;
-        }
-      }
-    };
-    return alerts;
-  }
+    .controller('CalculatedResultController', ["$rootScope", function ($rootScope) {
+      var controller = this;
+      controller.isVisible = false;
+      $rootScope.$on('user:connected', function () {
+        console.log('rootScope user:connected. CalculatedResultController showing.');
+        controller.isVisible = true;
+      });
+    }]);
 })();
 (function () {
   'use strict';
@@ -394,7 +392,8 @@
     .directive('customizationSliders', function () {
       return {
         scope: {
-          estimates: '='
+          estimates: '=',
+          recalc: '='
         },
         restrict: 'E',
         replace: false,
@@ -403,9 +402,12 @@
         }
       };
     })
-    .controller('CustomizationSliderController', CustomizationSliderController);
-  function CustomizationSliderController (scope) {
-    console.log('CustomizationSliderController: initialized');
-  }
-  CustomizationSliderController.$inject = ["scope"];
+    .controller('CustomizationSliderController', ["$rootScope", function ($rootScope) {
+      var controller = this;
+      controller.isVisible = false;
+      $rootScope.$on('user:connected', function () {
+        console.log('rootScope user:connected. CustomizationSliderController showing.');
+        controller.isVisible = true;
+      });
+    }]);
 })();

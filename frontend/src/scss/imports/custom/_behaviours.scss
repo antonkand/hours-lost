@@ -12,7 +12,6 @@
 
 .vertical-center {
   margin: 15vh 0;
-//  height: 70vh;
 }
 
 .horizontal-center {
@@ -88,4 +87,11 @@
 
 .is-90-percent-w {
   width: 90%;
+}
+
+@media (min-width: 400px) {
+  .single-row-on-mobile {
+    display: inline-block;
+    clear: left;
+  }
 }

@@ -1,4 +1,5 @@
-<div class="bg-aqua">
+<div ng-controller="CustomizationSliderController as ctrl">
+<div class="bg-aqua" ng-show="ctrl.isVisible">
 	<div class="bg-white">
 		<h5 class="inline-block"><i class="icon-info navy-font"></i>Drag the slider to tweak the numbers</h5>
 		    <div class="row no-margin-bottom">
@@ -33,7 +34,18 @@
 		        </div>
 		    </div>
 		    <div class="row">
-		        <h5 class="twelve columns"><strong>New estimate:</strong> about {{estimates}}. <strong>Exact minutes:</strong> {{estimates}}.</h5>
+		        <h5 class="six columns"><strong>New estimated minutes per media:</strong>
+			        <br>
+			        Tweet: {{estimates.tweet}}
+			        <br>
+			        Facebook: {{estimates.facebookPost}}
+			        <br>
+			        Google+: {{estimates.gplusPost}}
+			        <br>
+			        Instagram: {{estimates.instagram}}
+		        </h5>
+			    <button class="button-primary" ng-click="recalc()">Recalculate</button>
 		    </div>
 		</div>
 </div>
+	</div>

@@ -6,12 +6,14 @@
     <%- include partials/css.ejs %>
 </head>
 <body ng-controller="HoursLostController as hourslost" ng-cloak>
-    <%- include partials/landingpage_leadcopy.ejs %>
-    <oauth-buttons values="hourslost.usernames"></oauth-buttons>
-    <calculated-result totals="hourslost.data.total"></calculated-result>
-    <customization-sliders estimates="hourslost.data.estimates"></customization-sliders>
-    <final-result minutes="hourslost.data.minutes"></final-result>
-    <share-field sharemessage="{{hourslost.shareMessage}}"></share-field>
-    <%- include partials/scripts.ejs %>
+    <div class="container">
+        <%- include partials/landingpage_leadcopy.ejs %>
+        <oauth-buttons values="hourslost.usernames"></oauth-buttons>
+        <customization-sliders estimates="hourslost.data.estimates" recalc="hourslost.recalc"></customization-sliders>
+        <calculated-result total="hourslost.data.total.minutes"></calculated-result>
+        <final-result minutes="hourslost.data.minutes"></final-result>
+        <share-field sharemessage="{{hourslost.shareMessage}}"></share-field>
+        <%- include partials/scripts.ejs %>
+        <%- include partials/footer.ejs %>
+    </div>
 </body>
-<%- include partials/footer.ejs %>

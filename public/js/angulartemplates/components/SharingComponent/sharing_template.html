@@ -1,17 +1,18 @@
-<div class="row bg-white no-margin-bottom">
-  <div class="twelve columns bump-1-rem-top no-margin-bottom">
-    <h4>Ironically, I urge you to share this. <i class="icon-happy"></i></h4>
-    <div class="row aligns-right no-margin-bottom no-padding-bottom">
-	    <textarea class="aligns-right is-90-percent-w" name="shareArea" id="share" cols="30" rows="10" placeholder="{{sharemessage}}"></textarea>
-    </div>
-	  <div class="row aligns-right no-margin no-padding">
-		  <p>
-		    <i class="large-font icon-twitter no-margin-top no-padding-top"></i>
-		    <i class="large-font icon-facebook no-margin-top no-padding-top"></i>
-		    <i class="large-font icon-instagram no-margin-top no-padding-top"></i>
-		    <i class="large-font icon-gplus no-margin-top no-padding-top"></i>
-		  </p>
-    </div>
-  </div>
-  </div>
+<div ng-controller="SharingController as ctrl">
+	<div class="row bg-white no-margin-bottom" ng-show="ctrl.isVisible">
+	  <div class="twelve columns bump-1-rem-top no-margin-bottom">
+	    <h4>Ironically, I urge you to share this. <i class="icon-happy"></i></h4>
+	    <div class="row aligns-right no-margin-bottom no-padding-bottom">
+		    <textarea class="aligns-right is-90-percent-w" name="shareArea" id="share" cols="30" rows="10" placeholder="{{sharemessage}}"></textarea>
+	    </div>
+		  <div class="row aligns-right no-margin no-padding">
+			  <p>
+			    <i class="large-font icon-twitter no-margin-top no-padding-top"></i>
+			    <i class="large-font icon-facebook no-margin-top no-padding-top"></i>
+			    <i class="large-font icon-instagram no-margin-top no-padding-top"></i>
+			    <i class="large-font icon-gplus no-margin-top no-padding-top"></i>
+			  </p>
+	    </div>
+	  </div>
+	</div>
 </div>
