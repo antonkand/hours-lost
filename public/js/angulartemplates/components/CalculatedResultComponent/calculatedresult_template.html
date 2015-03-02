@@ -1,15 +1,9 @@
 <div ng-controller="CalculatedResultController as ctrl">
-	<div class="bump-1-rem-top no-margin-bottom fifty-percent-w" ng-show="ctrl.isVisible">
+	<div class="no-margin-bottom" ng-show="ctrl.isVisible">
 	        <div class="row">
 	                <div class="twelve columns">
 	                     <h1>You've lost around {{total / 60 | number: 2}} hours of your life.</h1>
 	                     <br><h3>Total minutes: {{total}}.</h3>
-	                     <p class="icon-info is-small-font">
-	                       This calculation is based on your number of tweets, posts and Instagrams.
-	                       The estimate for each are quite optimistic, tweets count for 2 minutes, posts 5 minutes and Instagrams for 7 minutes.
-	                       All the time you've spent scrolling through feeds or reading spam-tweets isn't counted.
-	                       So, you've probably lost a whole lot more hours.
-	                     </p>
 	                </div>
 	        </div>
 	</div>

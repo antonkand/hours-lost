@@ -22,8 +22,8 @@
       var controller = this;
       var localId = 'hoursLost'; // used as localStorage id
       var calc = SocialMediaCalculator.calc;
-      var on = SocketHandler.addListener;
-      var emit = SocketHandler.emit;
+      var socketOn = SocketHandler.addListener;
+      var socketEmit = SocketHandler.emit;
       var offlineHandler = OfflineHandler;
       var getDataFromServer = function () {
         // TODO: $http.get this data
@@ -86,7 +86,7 @@
       // on connect, server emits all:user,
       // fetch those user accounts, overwrite this.user.accounts
       // store usernames in this.usernames for reference on oauth buttons
-      on('all:user', function (data) {
+      socketOn('all:user', function (data) {
         if (data) {
           $rootScope.$emit('user:connected', true);
           controller.user.accounts = data.user;
@@ -99,12 +99,12 @@
           console.log('user updated with server data: ', controller.user.accounts);
         }
       });
-      on('get:twitter', function (data) {
+      socketOn('get:twitter', function (data) {
         console.log('get:twitter');
         controller.data.socialMediaPosts.tweets = data;
         console.log(controller.data);
       });
-      on('get:instagram', function (data) {
+      socketOn('get:instagram', function (data) {
         console.log('get:instagram');
         controller.data.socialMediaPosts.instagrams = data;
         console.log(controller.data);
@@ -117,7 +117,7 @@
           return site.name !== null;
         })
           .forEach(function (socialmedia) {
-            emit('get:' + socialmedia.media, socialmedia);
+            socketEmit('get:' + socialmedia.media, socialmedia);
           });
       };
     });

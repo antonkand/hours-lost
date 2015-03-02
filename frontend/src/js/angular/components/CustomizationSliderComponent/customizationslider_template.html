@@ -1,51 +1,31 @@
 <div ng-controller="CustomizationSliderController as ctrl">
-<div class="bg-aqua" ng-show="ctrl.isVisible">
-	<div class="bg-white">
-		<h5 class="inline-block"><i class="icon-info navy-font"></i>Drag the slider to tweak the numbers</h5>
+<div class="bg-white" ng-show="ctrl.isVisible">
+			<h5 class="inline-block">Drag the slider and tweak how much minutes you spend posting to social media.</h5>
+				<p class="icon-info navy-font is-small-font">Default estimates are quite low and is per post.</p>
 		    <div class="row no-margin-bottom">
 		        <div class="twelve columns">
-		            <i class="icon-twitter two columns medium-font center-text"></i>
-		            <input type="range" min="0" max="100" ng-model="estimates.tweet" step="1" class="ten columns is-90-percent-w u-pull-right">
-			          <p class="twelve columns center-text">{{estimates.tweet}}</p>
+								<i class="icon-twitter two columns medium-font center-text">{{estimates.tweet}} <span ng-if="estimates.tweet < 2">minute</span> <span ng-if="estimates.tweet >= 2">minutes</span></i>
+		            <input type="range" min="0" max="100" ng-model="estimates.tweet" step="1" class="ten columns is-90-percent-w u-pull-right" ng-change="recalc()">
 		        </div>
 		    </div>
 		    <div class="row no-margin-bottom">
 		        <div class="twelve columns">
-		            <i class="icon-facebook two columns medium-font center-text"></i>
-		            <input type="range" min="0" max="100" ng-model="estimates.facebookPost" step="1" class="ten columns is-90-percent-w u-pull-right">
-								<p class="twelve columns center-text">{{estimates.facebookPost}}</p>
+		            <i class="icon-facebook two columns medium-font center-text">{{estimates.facebookPost}} <span ng-if="estimates.facebookPost < 2">minute</span> <span ng-if="estimates.facebookPost >= 2">minutes</span></i>
+		            <input type="range" min="0" max="100" ng-model="estimates.facebookPost" step="1" class="ten columns is-90-percent-w u-pull-right" ng-change="recalc()">
+		        </div>
+		    </div>
+		    <div class="row no-margin-bottom">
+		        <div class="twelve columns">
+		            <i class="icon-instagram two columns medium-font center-text">{{estimates.instagram}} <span ng-if="estimates.instagram < 2">minute</span> <span ng-if="estimates.instagram >= 2">minutes</span></i>
+		            <input type="range" min="0" max="100" ng-model="estimates.instagram" step="1" class="ten columns is-90-percent-w u-pull-right" ng-change="recalc()">
 
 		        </div>
 		    </div>
 		    <div class="row no-margin-bottom">
 		        <div class="twelve columns">
-		            <i class="icon-instagram two columns medium-font center-text"></i>
-		            <input type="range" min="0" max="100" ng-model="estimates.instagram" step="1" class="ten columns is-90-percent-w u-pull-right">
-			          <p class="twelve columns center-text">{{estimates.instagram}}</p>
-
+		            <i class="icon-gplus two columns medium-font center-text no-margin-bottom">{{estimates.gplusPost}} <span ng-if="estimates.gplusPost < 2">minute</span> <span ng-if="estimates.gplusPost >= 2">minutes</span></i>
+		            <input type="range" min="0" max="100" ng-model="estimates.gplusPost" step="1" class="ten columns no-margin-bottom is-90-percent-w u-pull-right" ng-change="recalc()">
 		        </div>
-		    </div>
-		    <div class="row no-margin-bottom">
-		        <div class="twelve columns">
-		            <i class="icon-gplus two columns medium-font center-text"></i>
-		            <input type="range" min="0" max="100" ng-model="estimates.gplusPost" step="1" class="ten columns is-90-percent-w u-pull-right">
-		            <p class="twelve columns center-text">{{estimates.gplusPost}}</p>
-
-		        </div>
-		    </div>
-		    <div class="row">
-		        <h5 class="six columns"><strong>New estimated minutes per media:</strong>
-			        <br>
-			        Tweet: {{estimates.tweet}}
-			        <br>
-			        Facebook: {{estimates.facebookPost}}
-			        <br>
-			        Google+: {{estimates.gplusPost}}
-			        <br>
-			        Instagram: {{estimates.instagram}}
-		        </h5>
-			    <button class="button-primary" ng-click="recalc()">Recalculate</button>
 		    </div>
 		</div>
-</div>
 	</div>

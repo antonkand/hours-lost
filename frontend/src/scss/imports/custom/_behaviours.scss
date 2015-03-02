@@ -84,14 +84,18 @@
 .bottom-margin-medium {
   margin-bottom: 1.6rem;
 }
+.is-70-percent-w {
+  width: 90%;
+}
+
 
 .is-90-percent-w {
   width: 90%;
 }
 
-@media (min-width: 400px) {
+@media (max-width: 400px) {
   .single-row-on-mobile {
     display: inline-block;
-    clear: left;
+    clear: both;
   }
 }
